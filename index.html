@@ -3,1427 +3,245 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Polla Mundial 2026 · Pronósticos Poisson</title>
+<title>Mundial 2026 · Plantilla de Pronósticos</title>
 <style>
-  :root { --bg:#0d1117; --card:#161b22; --line:#30363d; --txt:#e6edf3; --dim:#8b949e;
-          --c1:#2ea043; --cx:#8b949e; --c2:#d29922; }
+  :root { --bg:#0a0e14; --card:#121925; --card2:#0e141d; --line:#243044; --txt:#e8edf4;
+          --dim:#7d8aa0; --green:#17c964; --gold:#f5a524; --blue:#3d9bff; --red:#f3415f; }
   * { box-sizing:border-box; margin:0; }
-  body { background:var(--bg); color:var(--txt); font:15px/1.45 'Segoe UI',system-ui,sans-serif; padding:24px; }
-  h1 { font-size:26px; margin-bottom:4px; }
-  .sub { color:var(--dim); margin-bottom:24px; font-size:13px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; }
-  .group { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
-  .group h2 { font-size:15px; color:#58a6ff; margin-bottom:10px; letter-spacing:.5px; }
-  .match { padding:8px 0; border-top:1px solid var(--line); }
-  .match:first-of-type { border-top:none; }
-  .mdate { font-size:10.5px; color:var(--dim); text-align:center; margin-bottom:2px; }
-  .standings { width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;
-                border-top:2px solid var(--line); }
-  .standings th { color:var(--dim); text-align:left; font-weight:600; padding:4px 6px 2px; }
-  .standings td { padding:2px 6px; }
-  .standings tr.q1 td { color:#3fb950; font-weight:600; }
-  .standings tr.q3 td { color:#d29922; }
-  .teams { display:flex; align-items:center; gap:8px; }
-  .team { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .team.away { text-align:right; }
-  .team.fav { font-weight:600; }
-  .scorebox { display:flex; flex-direction:column; align-items:center; gap:1px; }
-  .score { font-weight:700; font-size:17px; background:#21262d; border-radius:6px; padding:1px 10px; }
-  .exact { font-size:10px; color:#58a6ff; white-space:nowrap; }
-  .bar { display:flex; height:5px; border-radius:3px; overflow:hidden; margin:6px 0 3px; }
-  .b1 { background:var(--c1); } .bx { background:var(--cx); } .b2 { background:var(--c2); }
-  .probs { display:flex; justify-content:space-between; font-size:11.5px; color:var(--dim); }
-  .probs .g1 { color:var(--c1); } .probs .g2 { color:var(--c2); }
-  table { border-collapse:collapse; margin-top:30px; font-size:13px; }
-  th,td { padding:4px 12px; text-align:left; border-bottom:1px solid var(--line); }
-  th { color:var(--dim); font-weight:600; }
-  .note { color:var(--dim); font-size:12px; margin-top:26px; max-width:760px; }
+  body { background:var(--bg); color:var(--txt); font:13px/1.45 'Segoe UI',system-ui,sans-serif; }
+  a { color:var(--blue); text-decoration:none; }
+
+  header { background:linear-gradient(135deg,#101c2e 0%,#0d2818 55%,#101c2e 100%);
+            border-bottom:1px solid var(--line); padding:20px 28px 16px; }
+  header h1 { font-size:23px; letter-spacing:.3px; }
+  header h1 span { color:var(--green); }
+  .sub { color:var(--dim); font-size:12.5px; margin-top:4px; }
+  .nav { margin-top:12px; display:flex; gap:8px; }
+  .nav a { background:#1b2940; border:1px solid var(--line); color:var(--txt);
+            padding:5px 14px; border-radius:99px; font-size:12px; }
+  .nav a.on { background:var(--green); color:#04240f; font-weight:700; border-color:var(--green); }
+
+  main { padding:20px 24px 30px; }
+  .today { background:linear-gradient(90deg,#1c1023,#121925); border:1px solid #5b2740;
+            border-radius:11px; padding:10px 16px; margin-bottom:20px; }
+  .today-h { font-size:11px; font-weight:800; letter-spacing:2px; color:var(--red); margin-bottom:6px; }
+  .today-m { display:flex; align-items:center; gap:14px; padding:3px 0; font-size:14px; }
+  .today-m .tg { font-size:9.5px; color:var(--dim); background:var(--card2); border:1px solid var(--line);
+                  border-radius:99px; padding:1px 9px; white-space:nowrap; }
+  .today-m .tt b { background:var(--card2); border:1px solid var(--line); border-radius:6px;
+                    padding:0 8px; margin:0 4px; }
+  .today-m .tr { margin-left:auto; font-size:11px; color:var(--green); font-weight:700; white-space:nowrap; }
+  h2.sec { font-size:15px; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold);
+            margin:6px 0 14px; display:flex; align-items:center; gap:10px; }
+  h2.sec::after { content:''; flex:1; height:1px; background:var(--line); }
+
+  /* ---------- bracket ---------- */
+  .bracket { display:flex; gap:20px; overflow-x:auto; padding-bottom:14px; min-height:1150px; }
+  .col { display:flex; flex-direction:column; min-width:172px; flex:1; }
+  .rnd { height:30px; font-size:10.5px; color:var(--dim); text-align:center;
+          text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+  .body { flex:1; display:flex; flex-direction:column; }
+  .pair { flex:1; display:flex; flex-direction:column; position:relative; }
+  .pair::after { content:''; position:absolute; top:25%; height:50%; width:10px; right:-11px;
+                  border:1px solid var(--line); border-left:none; border-radius:0 5px 5px 0; }
+  .pair.r::after { right:auto; left:-11px; border-left:1px solid var(--line); border-right:none;
+                    border-radius:5px 0 0 5px; }
+  .slot { flex:1; display:flex; align-items:center; }
+  .m { width:100%; background:var(--card); border:1px solid var(--line); border-radius:9px;
+        padding:6px 8px; position:relative; cursor:pointer; transition:border-color .15s, transform .15s; }
+  .m:hover { border-color:var(--green); transform:translateY(-1px); }
+  .m.in::before { content:''; position:absolute; top:50%; left:-11px; width:10px;
+                   border-top:1px solid var(--line); }
+  .m.in.r::before { left:auto; right:-11px; }
+  .m.out::after { content:''; position:absolute; top:50%; right:-11px; width:10px;
+                   border-top:1px solid var(--line); }
+  .m.out.r::after { right:auto; left:-11px; }
+  .m.fin::before, .m.fin::after { content:''; position:absolute; top:50%; width:10px;
+                                    border-top:1px solid var(--line); }
+  .m.fin::before { left:-11px; } .m.fin::after { right:-11px; }
+  .mhead { display:flex; justify-content:space-between; align-items:center; margin-bottom:1px; }
+  .mnum { font-size:9px; color:var(--dim); background:var(--card2); border-radius:4px; padding:0 5px; }
+  .mdate { font-size:9.5px; color:var(--gold); font-weight:600; white-space:nowrap; }
+  .lbl { font-size:9px; color:var(--dim); margin-bottom:3px; }
+  .t { display:flex; align-items:center; gap:5px; padding:1.5px 0; color:var(--dim); }
+  .t .n { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12.5px; }
+  .t.win { color:var(--txt); font-weight:700; }
+  .t .gl { min-width:20px; text-align:center; background:var(--card2); border-radius:5px;
+            font-weight:700; border:1px solid var(--line); }
+  .t.win .gl { background:var(--green); color:#04240f; border-color:var(--green); }
+  .sc { display:flex; justify-content:space-between; align-items:center; gap:6px; flex-wrap:wrap;
+         font-size:10.5px; color:var(--green); border-top:1px dashed var(--line);
+         margin-top:4px; padding-top:3px; }
+  .odds { font-size:9.5px; color:#04240f; background:var(--green); border-radius:99px;
+           padding:1px 7px; font-weight:700; white-space:nowrap; }
+  .m .why { display:none; font-size:10px; line-height:1.4; color:var(--dim); margin-top:4px;
+             border-top:1px dashed var(--line); padding-top:4px; }
+  .m.open .why { display:block; }
+  .final .m { border-color:var(--gold); box-shadow:0 0 18px rgba(245,165,36,.12); }
+  .champ { position:absolute; top:100%; left:0; right:0; text-align:center; margin-top:12px;
+            background:linear-gradient(135deg,#2a1f06,#1c1503); border:1px solid var(--gold);
+            border-radius:9px; padding:7px 4px; font-size:17px; font-weight:800; color:var(--gold); }
+  .champlbl { font-size:8.5px; letter-spacing:2px; color:#b8860b; font-weight:600; }
+
+  /* ---------- mini-grupos en el bracket (mismas tarjetas) ---------- */
+  .gcol { min-width:170px; flex:1; }
+  .gcol .body { gap:10px; }
+  .gm { width:100%; background:var(--card2); border:1px solid var(--line); border-radius:9px;
+         padding:5px 7px 6px; }
+  .gmh { font-size:9.5px; font-weight:800; letter-spacing:1.5px; color:var(--blue); margin-bottom:3px; }
+  .mg { background:var(--card); border:1px solid var(--line); border-radius:7px;
+         padding:3px 6px 4px; margin-bottom:4px; }
+  .mghead { display:flex; justify-content:space-between; gap:4px; font-size:8.5px;
+             color:var(--dim); margin-bottom:1px; }
+  .mghead .mgr { color:var(--green); font-weight:700; white-space:nowrap; }
+  .mg .t { padding:0.5px 0; }
+  .mg .t .n { font-size:11px; }
+  .mg .t .gl { min-width:17px; font-size:11px; }
+  .gmq { font-size:9.5px; color:var(--green); margin-top:2px; line-height:1.35; }
+  .gmq b { font-weight:700; }
+
+  /* ---------- grupos ---------- */
+  .groups { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:14px; }
+  .g { background:var(--card); border:1px solid var(--line); border-radius:11px;
+        padding:0 0 10px; overflow:hidden; }
+  .ghead { background:linear-gradient(90deg,#16233a,#121925); color:var(--blue); font-weight:800;
+            letter-spacing:2px; font-size:12px; padding:8px 14px; border-bottom:1px solid var(--line); }
+  .jor { font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:1.5px;
+          padding:7px 14px 2px; }
+  .fx { display:flex; align-items:center; gap:6px; font-size:11.5px; padding:2.5px 14px; cursor:help; }
+  .fx:hover { background:var(--card2); }
+  .fx .fd { color:var(--dim); min-width:58px; font-size:9.5px; }
+  .fx .fa { flex:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fx .fb { flex:1.1; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fx .fs { font-weight:800; background:var(--card2); border:1px solid var(--line);
+             border-radius:5px; padding:0 6px; }
+  .fx .fr { font-size:9px; color:var(--green); white-space:nowrap; min-width:92px; text-align:right; }
+  .g table { width:calc(100% - 28px); margin:9px 14px 0; border-collapse:collapse; font-size:11.5px;
+              border-top:2px solid var(--line); }
+  .g th { color:var(--dim); text-align:left; font-weight:600; font-size:9.5px;
+           text-transform:uppercase; letter-spacing:.5px; padding:6px 6px 3px; }
+  .g td { padding:3px 6px; border-top:1px solid #1a2436; }
+  .g tr.q1 td { color:var(--green); font-weight:600; }
+  .g tr.q3 td { color:var(--gold); }
+  .g tr.q0 td { color:var(--dim); }
+  .tag { font-size:8.5px; border:1px solid currentColor; border-radius:99px; padding:0 7px;
+          text-transform:uppercase; letter-spacing:.5px; }
+
+  .note { color:var(--dim); font-size:11px; margin-top:22px; max-width:880px; line-height:1.5; }
+  .note b { color:var(--txt); }
 </style>
 </head>
 <body>
-<h1>⚽ Polla Mundial 2026 — Pronósticos Poisson</h1>
-<p class="sub">Marcador más probable por partido (fase de grupos) · barras = prob. gana local / empate / gana visitante ·
-calibrado con partidos internacionales de 2023–2024 (API-Football) · μ global = 1.83 goles/partido ·
-<a href="bracket.html" style="color:#58a6ff">ver plantilla de eliminatoria completa →</a></p>
-<div class="grid">
-    <div class="group">
-      <h2>Grupo A</h2>
-      <div class="match">
-        <div class="mdate">J1 · 11 jun</div>
-        <div class="teams">
-          <span class="team fav">🇲🇽 México</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Sudáfrica 🇿🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:60.6%"></div>
-          <div class="bx" style="width:20.2%"></div>
-          <div class="b2" style="width:19.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana México 61%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Sudáfrica 19%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 12 jun</div>
-        <div class="teams">
-          <span class="team fav">🇰🇷 Corea del Sur</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">R. Checa 🇨🇿</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:43.9%"></div>
-          <div class="bx" style="width:22.7%"></div>
-          <div class="b2" style="width:33.4%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Corea del Sur 44%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana R. Checa 33%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 18 jun</div>
-        <div class="teams">
-          <span class="team fav">🇨🇿 R. Checa</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Sudáfrica 🇿🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:46.4%"></div>
-          <div class="bx" style="width:22.9%"></div>
-          <div class="b2" style="width:30.7%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana R. Checa 46%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Sudáfrica 31%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 19 jun</div>
-        <div class="teams">
-          <span class="team fav">🇲🇽 México</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Corea del Sur 🇰🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:47.5%"></div>
-          <div class="bx" style="width:22.6%"></div>
-          <div class="b2" style="width:29.9%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana México 47%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Corea del Sur 30%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 25 jun</div>
-        <div class="teams">
-          <span class="team ">🇿🇦 Sudáfrica</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Corea del Sur 🇰🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:26.1%"></div>
-          <div class="bx" style="width:22.4%"></div>
-          <div class="b2" style="width:51.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Sudáfrica 26%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana Corea del Sur 52%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 25 jun</div>
-        <div class="teams">
-          <span class="team ">🇨🇿 R. Checa</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away fav">México 🇲🇽</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:25.3%"></div>
-          <div class="bx" style="width:21.4%"></div>
-          <div class="b2" style="width:53.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana R. Checa 25%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana México 53%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇲🇽 México</td><td>5.5</td><td>+2.1</td></tr><tr class='q1'><td>2</td><td>🇰🇷 Corea del Sur</td><td>4.4</td><td>+0.4</td></tr><tr class='q3'><td>3</td><td>🇨🇿 R. Checa</td><td>3.8</td><td>-0.6</td></tr><tr class=''><td>4</td><td>🇿🇦 Sudáfrica</td><td>2.9</td><td>-2.0</td></tr>
+<header>
+  <h1>🏆 Mundial 2026 <span>· Plantilla de Pronósticos</span></h1>
+  <div class="sub">Modelo Poisson + ranking FIFA · 48 selecciones · 11 jun – 19 jul 2026 ·
+  haz clic en cualquier llave para ver por qué gana</div>
+  <div class="nav"><a class="on" href="index.html">Eliminatoria y grupos</a>
+  <a href="grupos.html">Cuadrícula completa de grupos</a></div>
+</header>
+<main>
+<div class='today'><div class='today-h'>🔴 HOY · 11 jun</div><div class='today-m'><span class='tg'>Grupo A</span><span class='tt'>🇲🇽 México <b>2–1</b> Sudáfrica 🇿🇦</span><span class='tr'>Gana México · 61% · cuota 1.65</span></div></div>
+<h2 class="sec">Eliminación directa · empieza el 28 de junio</h2>
+<div class='bracket'><div class='col gcol'><div class='rnd'>Fase de grupos · 11–27 jun</div><div class='body'><div class='slot'><div class='gm'><div class='gmh'>GRUPO A</div><div class='mg'><div class='mghead'><span>J1 · 11 jun</span><span class='mgr'>Gana México 61%</span></div><div class='t win'><span class='n'>🇲🇽 México</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇿🇦 Sudáfrica</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 12 jun</span><span class='mgr'>Gana Corea del Sur 44%</span></div><div class='t win'><span class='n'>🇰🇷 Corea del Sur</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇨🇿 R. Checa</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 18 jun</span><span class='mgr'>Gana R. Checa 46%</span></div><div class='t win'><span class='n'>🇨🇿 R. Checa</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇿🇦 Sudáfrica</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 19 jun</span><span class='mgr'>Gana México 47%</span></div><div class='t win'><span class='n'>🇲🇽 México</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇰🇷 Corea del Sur</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 25 jun</span><span class='mgr'>Gana Corea del Sur 52%</span></div><div class='t '><span class='n'>🇿🇦 Sudáfrica</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇰🇷 Corea del Sur</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 25 jun</span><span class='mgr'>Gana México 53%</span></div><div class='t '><span class='n'>🇨🇿 R. Checa</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇲🇽 México</span><span class='gl'>2</span></div></div><div class='gmq'>Avanzan: <b>México</b> y <b>Corea del Sur</b> + R. Checa (3°)</div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO B</div><div class='mg'><div class='mghead'><span>J1 · 12 jun</span><span class='mgr'>Gana Canadá 55%</span></div><div class='t win'><span class='n'>🇨🇦 Canadá</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇧🇦 Bosnia</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 13 jun</span><span class='mgr'>Gana Suiza 55%</span></div><div class='t '><span class='n'>🇶🇦 Catar</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇨🇭 Suiza</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 18 jun</span><span class='mgr'>Gana Suiza 62%</span></div><div class='t win'><span class='n'>🇨🇭 Suiza</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇧🇦 Bosnia</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 19 jun</span><span class='mgr'>Gana Canadá 48%</span></div><div class='t win'><span class='n'>🇨🇦 Canadá</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇶🇦 Catar</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 24 jun</span><span class='mgr'>Gana Catar 45%</span></div><div class='t '><span class='n'>🇧🇦 Bosnia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇶🇦 Catar</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 24 jun</span><span class='mgr'>Gana Suiza 45%</span></div><div class='t win'><span class='n'>🇨🇭 Suiza</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇨🇦 Canadá</span><span class='gl'>1</span></div></div><div class='gmq'>Avanzan: <b>Suiza</b> y <b>Canadá</b> + Catar (3°)</div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO C</div><div class='mg'><div class='mghead'><span>J1 · 14 jun</span><span class='mgr'>Gana Marruecos 40%</span></div><div class='t '><span class='n'>🇧🇷 Brasil</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇲🇦 Marruecos</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 14 jun</span><span class='mgr'>Gana Escocia 44%</span></div><div class='t '><span class='n'>🇭🇹 Haití</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 20 jun</span><span class='mgr'>Gana Marruecos 62%</span></div><div class='t '><span class='n'>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇲🇦 Marruecos</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J2 · 20 jun</span><span class='mgr'>Gana Brasil 68%</span></div><div class='t win'><span class='n'>🇧🇷 Brasil</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇭🇹 Haití</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 25 jun</span><span class='mgr'>Gana Brasil 61%</span></div><div class='t '><span class='n'>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇧🇷 Brasil</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J3 · 25 jun</span><span class='mgr'>Gana Marruecos 69%</span></div><div class='t win'><span class='n'>🇲🇦 Marruecos</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇭🇹 Haití</span><span class='gl'>1</span></div></div><div class='gmq'>Avanzan: <b>Marruecos</b> y <b>Brasil</b></div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO D</div><div class='mg'><div class='mghead'><span>J1 · 13 jun</span><span class='mgr'>Gana EE.UU. 55%</span></div><div class='t win'><span class='n'>🇺🇸 EE.UU.</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇵🇾 Paraguay</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 14 jun</span><span class='mgr'>Gana Australia 39%</span></div><div class='t win'><span class='n'>🇦🇺 Australia</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇹🇷 Turquía</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 19 jun</span><span class='mgr'>Gana EE.UU. 43%</span></div><div class='t win'><span class='n'>🇺🇸 EE.UU.</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇦🇺 Australia</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 20 jun</span><span class='mgr'>Gana Turquía 51%</span></div><div class='t win'><span class='n'>🇹🇷 Turquía</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇵🇾 Paraguay</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 26 jun</span><span class='mgr'>Gana EE.UU. 43%</span></div><div class='t '><span class='n'>🇹🇷 Turquía</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇺🇸 EE.UU.</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 26 jun</span><span class='mgr'>Gana Australia 50%</span></div><div class='t '><span class='n'>🇵🇾 Paraguay</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇦🇺 Australia</span><span class='gl'>1</span></div></div><div class='gmq'>Avanzan: <b>EE.UU.</b> y <b>Australia</b> + Turquía (3°)</div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO E</div><div class='mg'><div class='mghead'><span>J1 · 14 jun</span><span class='mgr'>Gana Alemania 71%</span></div><div class='t win'><span class='n'>🇩🇪 Alemania</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇨🇼 Curazao</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 15 jun</span><span class='mgr'>Gana C. de Marfil 39%</span></div><div class='t win'><span class='n'>🇨🇮 C. de Marfil</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇪🇨 Ecuador</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 20 jun</span><span class='mgr'>Gana Alemania 53%</span></div><div class='t win'><span class='n'>🇩🇪 Alemania</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇨🇮 C. de Marfil</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 21 jun</span><span class='mgr'>Gana Ecuador 55%</span></div><div class='t win'><span class='n'>🇪🇨 Ecuador</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇨🇼 Curazao</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 25 jun</span><span class='mgr'>Gana Alemania 55%</span></div><div class='t '><span class='n'>🇪🇨 Ecuador</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇩🇪 Alemania</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J3 · 25 jun</span><span class='mgr'>Gana C. de Marfil 56%</span></div><div class='t '><span class='n'>🇨🇼 Curazao</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇨🇮 C. de Marfil</span><span class='gl'>2</span></div></div><div class='gmq'>Avanzan: <b>Alemania</b> y <b>C. de Marfil</b> + Ecuador (3°)</div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO F</div><div class='mg'><div class='mghead'><span>J1 · 14 jun</span><span class='mgr'>Gana P. Bajos 45%</span></div><div class='t win'><span class='n'>🇳🇱 P. Bajos</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇯🇵 Japón</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 15 jun</span><span class='mgr'>Gana Túnez 40%</span></div><div class='t '><span class='n'>🇸🇪 Suecia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇹🇳 Túnez</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 20 jun</span><span class='mgr'>Gana P. Bajos 64%</span></div><div class='t win'><span class='n'>🇳🇱 P. Bajos</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇸🇪 Suecia</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 21 jun</span><span class='mgr'>Gana Japón 55%</span></div><div class='t '><span class='n'>🇹🇳 Túnez</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇯🇵 Japón</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J3 · 26 jun</span><span class='mgr'>Gana Japón 59%</span></div><div class='t win'><span class='n'>🇯🇵 Japón</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇸🇪 Suecia</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 26 jun</span><span class='mgr'>Gana P. Bajos 60%</span></div><div class='t '><span class='n'>🇹🇳 Túnez</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇳🇱 P. Bajos</span><span class='gl'>2</span></div></div><div class='gmq'>Avanzan: <b>P. Bajos</b> y <b>Japón</b></div></div></div></div></div><div class='col'><div class='rnd'>Dieciseisavos · 28 jun–3 jul</div><div class='body'><div class='pair l'><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P74</span><span class='mdate'>📅 29 jun · Boston</span></div><div class='lbl'>1°E vs 3°(ABCDF)</div><div class='t win'><span class='n'>🇩🇪 Alemania</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇹🇷 Turquía</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Alemania</b> 2–1 a Turquía</span><span class='odds'>65% · 1.54</span></div><div class='why'>Gana Alemania por mejor ranking FIFA (1736 vs 1606 pts) y más gol esperado (2.1 vs 1.3). Probabilidad de pasar: 65% (cuota 1.54). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P77</span><span class='mdate'>📅 30 jun · Nueva York/NJ</span></div><div class='lbl'>1°I vs 3°(CDFGH)</div><div class='t win'><span class='n'>🇫🇷 Francia</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇪🇬 Egipto</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Francia</b> 2–1 a Egipto</span><span class='odds'>70% · 1.43</span></div><div class='why'>Gana Francia por mejor ranking FIFA (1871 vs 1562 pts) y más gol esperado (2.1 vs 1.1). Probabilidad de pasar: 70% (cuota 1.43). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div></div><div class='pair l'><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P73</span><span class='mdate'>📅 28 jun · Los Ángeles</span></div><div class='lbl'>2°A vs 2°B</div><div class='t win'><span class='n'>🇰🇷 Corea del Sur</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇨🇦 Canadá</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Corea del Sur</b> 2–1 a Canadá</span><span class='odds'>53% · 1.87</span></div><div class='why'>Gana Corea del Sur por mejor ranking FIFA (1592 vs 1559 pts) y más gol esperado (1.7 vs 1.5). Probabilidad de pasar: 53% (cuota 1.87). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P75</span><span class='mdate'>📅 29 jun · Monterrey</span></div><div class='lbl'>1°F vs 2°C</div><div class='t win'><span class='n'>🇳🇱 P. Bajos</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇧🇷 Brasil</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>P. Bajos</b> 2–1 a Brasil</span><span class='odds'>55% · 1.81</span></div><div class='why'>Gana P. Bajos por aunque Brasil tiene mejor ranking (1766 vs 1754 pts), el modelo le da más gol esperado (1.8 vs 1.6) por sus resultados 2023–24. Probabilidad de pasar: 55% (cuota 1.81). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div><div class='pair l'><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P83</span><span class='mdate'>📅 2 jul · Toronto</span></div><div class='lbl'>2°K vs 2°L</div><div class='t win'><span class='n'>🇨🇴 Colombia</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇭🇷 Croacia</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Colombia</b> 2–1 a Croacia</span><span class='odds'>51% · 1.97</span></div><div class='why'>Gana Colombia por aunque Croacia tiene mejor ranking (1715 vs 1698 pts), el modelo le da más gol esperado (1.7 vs 1.6) por sus resultados 2023–24. Probabilidad de pasar: 51% (cuota 1.97). Marcador más probable si gana: 2–1 (8% exacto).</div></div></div><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P84</span><span class='mdate'>📅 2 jul · Los Ángeles</span></div><div class='lbl'>1°H vs 2°J</div><div class='t win'><span class='n'>🇪🇸 España</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇦🇹 Austria</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>España</b> 2–1 a Austria</span><span class='odds'>70% · 1.43</span></div><div class='why'>Gana España por mejor ranking FIFA (1874 vs 1597 pts) y más gol esperado (2.3 vs 1.3). Probabilidad de pasar: 70% (cuota 1.43). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div></div><div class='pair l'><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P81</span><span class='mdate'>📅 1 jul · San Francisco</span></div><div class='lbl'>1°D vs 3°(BEFIJ)</div><div class='t win'><span class='n'>🇺🇸 EE.UU.</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇶🇦 Catar</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>EE.UU.</b> 2–1 a Catar</span><span class='odds'>66% · 1.51</span></div><div class='why'>Gana EE.UU. por mejor ranking FIFA (1671 vs 1450 pts) y más gol esperado (2.1 vs 1.3). Probabilidad de pasar: 66% (cuota 1.51). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P82</span><span class='mdate'>📅 1 jul · Seattle</span></div><div class='lbl'>1°G vs 3°(AEHIJ)</div><div class='t win'><span class='n'>🇧🇪 Bélgica</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇨🇿 R. Checa</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Bélgica</b> 2–1 a R. Checa</span><span class='odds'>67% · 1.48</span></div><div class='why'>Gana Bélgica por mejor ranking FIFA (1742 vs 1506 pts) y más gol esperado (2.2 vs 1.3). Probabilidad de pasar: 67% (cuota 1.48). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div></div></div></div><div class='col'><div class='rnd'>Octavos · 4–7 jul</div><div class='body'><div class='pair l'><div class='slot'><div class='m in l'><div class='mhead'><span class='mnum'>P89</span><span class='mdate'>📅 4 jul · Filadelfia</span></div><div class='lbl'>gana P74 vs gana P77</div><div class='t '><span class='n'>🇩🇪 Alemania</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇫🇷 Francia</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Francia</b> 2–1 a Alemania</span><span class='odds'>57% · 1.77</span></div><div class='why'>Gana Francia por mejor ranking FIFA (1871 vs 1736 pts) y más gol esperado (1.7 vs 1.4). Probabilidad de pasar: 57% (cuota 1.77). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div><div class='slot'><div class='m in l'><div class='mhead'><span class='mnum'>P90</span><span class='mdate'>📅 4 jul · Houston</span></div><div class='lbl'>gana P73 vs gana P75</div><div class='t '><span class='n'>🇰🇷 Corea del Sur</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇳🇱 P. Bajos</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>P. Bajos</b> 2–1 a Corea del Sur</span><span class='odds'>66% · 1.52</span></div><div class='why'>Gana P. Bajos por mejor ranking FIFA (1754 vs 1592 pts) y más gol esperado (2.1 vs 1.3). Probabilidad de pasar: 66% (cuota 1.52). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div></div><div class='pair l'><div class='slot'><div class='m in l'><div class='mhead'><span class='mnum'>P93</span><span class='mdate'>📅 6 jul · Dallas</span></div><div class='lbl'>gana P83 vs gana P84</div><div class='t '><span class='n'>🇨🇴 Colombia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇪🇸 España</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>España</b> 2–1 a Colombia</span><span class='odds'>63% · 1.58</span></div><div class='why'>Gana España por mejor ranking FIFA (1874 vs 1698 pts) y más gol esperado (2.0 vs 1.4). Probabilidad de pasar: 63% (cuota 1.58). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div><div class='slot'><div class='m in l'><div class='mhead'><span class='mnum'>P94</span><span class='mdate'>📅 6 jul · Seattle</span></div><div class='lbl'>gana P81 vs gana P82</div><div class='t '><span class='n'>🇺🇸 EE.UU.</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇧🇪 Bélgica</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Bélgica</b> 2–1 a EE.UU.</span><span class='odds'>59% · 1.69</span></div><div class='why'>Gana Bélgica por mejor ranking FIFA (1742 vs 1671 pts) y más gol esperado (1.9 vs 1.5). Probabilidad de pasar: 59% (cuota 1.69). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div></div></div><div class='col'><div class='rnd'>Cuartos · 9–11 jul</div><div class='body'><div class='pair l'><div class='slot'><div class='m in l'><div class='mhead'><span class='mnum'>P97</span><span class='mdate'>📅 9 jul · Boston</span></div><div class='lbl'>gana P89 vs gana P90</div><div class='t win'><span class='n'>🇫🇷 Francia</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇳🇱 P. Bajos</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Francia</b> 2–1 a P. Bajos</span><span class='odds'>55% · 1.82</span></div><div class='why'>Gana Francia por mejor ranking FIFA (1871 vs 1754 pts) y más gol esperado (1.8 vs 1.5). Probabilidad de pasar: 55% (cuota 1.82). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div><div class='slot'><div class='m in l'><div class='mhead'><span class='mnum'>P98</span><span class='mdate'>📅 10 jul · Los Ángeles</span></div><div class='lbl'>gana P93 vs gana P94</div><div class='t win'><span class='n'>🇪🇸 España</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇧🇪 Bélgica</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>España</b> 2–1 a Bélgica</span><span class='odds'>62% · 1.61</span></div><div class='why'>Gana España por mejor ranking FIFA (1874 vs 1742 pts) y más gol esperado (2.0 vs 1.4). Probabilidad de pasar: 62% (cuota 1.61). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div></div></div><div class='col'><div class='rnd'>Semifinal · 14 jul</div><div class='body'><div class='slot'><div class='m in out l'><div class='mhead'><span class='mnum'>P101</span><span class='mdate'>📅 14 jul · Dallas</span></div><div class='lbl'>gana P97 vs gana P98</div><div class='t '><span class='n'>🇫🇷 Francia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇪🇸 España</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>España</b> 2–1 a Francia</span><span class='odds'>54% · 1.86</span></div><div class='why'>Gana España por mejor ranking FIFA (1874 vs 1871 pts) y más gol esperado (1.7 vs 1.6). Probabilidad de pasar: 54% (cuota 1.86). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div></div><div class='col final'><div class='rnd'>🏆 Final · 19 jul</div><div class='body'><div class='slot'><div style='width:100%;position:relative'><div class='m fin'><div class='mhead'><span class='mnum'>P104</span><span class='mdate'>📅 19 jul · Nueva York/NJ</span></div><div class='lbl'>gana P101 vs gana P102</div><div class='t win'><span class='n'>🇪🇸 España</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇦🇷 Argentina</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>España</b> 2–1 a Argentina</span><span class='odds'>50% · 1.99</span></div><div class='why'>Gana España por aunque Argentina tiene mejor ranking (1876 vs 1874 pts), el modelo le da más gol esperado (1.6 vs 1.6) por sus resultados 2023–24. Probabilidad de pasar: 50% (cuota 1.99). Marcador más probable si gana: 2–1 (8% exacto).</div></div><div class='champ'><div class='champlbl'>CAMPEÓN PROYECTADO</div>🇪🇸 España</div></div></div></div></div><div class='col'><div class='rnd'>Semifinal · 15 jul</div><div class='body'><div class='slot'><div class='m in out r'><div class='mhead'><span class='mnum'>P102</span><span class='mdate'>📅 15 jul · Atlanta</span></div><div class='lbl'>gana P99 vs gana P100</div><div class='t '><span class='n'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇦🇷 Argentina</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Argentina</b> 2–1 a Inglaterra</span><span class='odds'>52% · 1.92</span></div><div class='why'>Gana Argentina por mejor ranking FIFA (1876 vs 1827 pts) y más gol esperado (1.5 vs 1.4). Probabilidad de pasar: 52% (cuota 1.92). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div></div><div class='col'><div class='rnd'>Cuartos · 9–11 jul</div><div class='body'><div class='pair r'><div class='slot'><div class='m in r'><div class='mhead'><span class='mnum'>P99</span><span class='mdate'>📅 11 jul · Miami</span></div><div class='lbl'>gana P91 vs gana P92</div><div class='t '><span class='n'>🇲🇦 Marruecos</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Inglaterra</b> 2–1 a Marruecos</span><span class='odds'>59% · 1.68</span></div><div class='why'>Gana Inglaterra por mejor ranking FIFA (1827 vs 1755 pts) y más gol esperado (1.7 vs 1.3). Probabilidad de pasar: 59% (cuota 1.68). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div><div class='slot'><div class='m in r'><div class='mhead'><span class='mnum'>P100</span><span class='mdate'>📅 11 jul · Kansas City</span></div><div class='lbl'>gana P95 vs gana P96</div><div class='t win'><span class='n'>🇦🇷 Argentina</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇵🇹 Portugal</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Argentina</b> 2–1 a Portugal</span><span class='odds'>60% · 1.67</span></div><div class='why'>Gana Argentina por mejor ranking FIFA (1876 vs 1766 pts) y más gol esperado (1.8 vs 1.4). Probabilidad de pasar: 60% (cuota 1.67). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div></div></div><div class='col'><div class='rnd'>Octavos · 4–7 jul</div><div class='body'><div class='pair r'><div class='slot'><div class='m in r'><div class='mhead'><span class='mnum'>P91</span><span class='mdate'>📅 5 jul · Nueva York/NJ</span></div><div class='lbl'>gana P76 vs gana P78</div><div class='t win'><span class='n'>🇲🇦 Marruecos</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇸🇳 Senegal</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Marruecos</b> 2–1 a Senegal</span><span class='odds'>54% · 1.84</span></div><div class='why'>Gana Marruecos por mejor ranking FIFA (1755 vs 1685 pts) y más gol esperado (1.6 vs 1.4). Probabilidad de pasar: 54% (cuota 1.84). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div><div class='slot'><div class='m in r'><div class='mhead'><span class='mnum'>P92</span><span class='mdate'>📅 5 jul · Ciudad de México</span></div><div class='lbl'>gana P79 vs gana P80</div><div class='t '><span class='n'>🇲🇽 México</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Inglaterra</b> 2–1 a México</span><span class='odds'>63% · 1.59</span></div><div class='why'>Gana Inglaterra por mejor ranking FIFA (1827 vs 1687 pts) y más gol esperado (1.9 vs 1.3). Probabilidad de pasar: 63% (cuota 1.59). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div></div><div class='pair r'><div class='slot'><div class='m in r'><div class='mhead'><span class='mnum'>P95</span><span class='mdate'>📅 7 jul · Atlanta</span></div><div class='lbl'>gana P86 vs gana P88</div><div class='t win'><span class='n'>🇦🇷 Argentina</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇮🇷 Irán</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Argentina</b> 2–1 a Irán</span><span class='odds'>66% · 1.51</span></div><div class='why'>Gana Argentina por mejor ranking FIFA (1876 vs 1620 pts) y más gol esperado (2.0 vs 1.3). Probabilidad de pasar: 66% (cuota 1.51). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div><div class='slot'><div class='m in r'><div class='mhead'><span class='mnum'>P96</span><span class='mdate'>📅 7 jul · Vancouver</span></div><div class='lbl'>gana P85 vs gana P87</div><div class='t '><span class='n'>🇳🇴 Noruega</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇵🇹 Portugal</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Portugal</b> 2–1 a Noruega</span><span class='odds'>60% · 1.66</span></div><div class='why'>Gana Portugal por mejor ranking FIFA (1766 vs 1557 pts) y más gol esperado (2.1 vs 1.6). Probabilidad de pasar: 60% (cuota 1.66). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div></div></div><div class='col'><div class='rnd'>Dieciseisavos · 28 jun–3 jul</div><div class='body'><div class='pair r'><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P76</span><span class='mdate'>📅 29 jun · Houston</span></div><div class='lbl'>1°C vs 2°F</div><div class='t win'><span class='n'>🇲🇦 Marruecos</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇯🇵 Japón</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Marruecos</b> 2–1 a Japón</span><span class='odds'>52% · 1.92</span></div><div class='why'>Gana Marruecos por mejor ranking FIFA (1755 vs 1662 pts) y más gol esperado (1.8 vs 1.7). Probabilidad de pasar: 52% (cuota 1.92). Marcador más probable si gana: 2–1 (8% exacto).</div></div></div><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P78</span><span class='mdate'>📅 30 jun · Dallas</span></div><div class='lbl'>2°E vs 2°I</div><div class='t '><span class='n'>🇨🇮 C. de Marfil</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇸🇳 Senegal</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Senegal</b> 2–1 a C. de Marfil</span><span class='odds'>58% · 1.73</span></div><div class='why'>Gana Senegal por mejor ranking FIFA (1685 vs 1541 pts) y más gol esperado (1.6 vs 1.3). Probabilidad de pasar: 58% (cuota 1.73). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div><div class='pair r'><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P79</span><span class='mdate'>📅 30 jun · Ciudad de México</span></div><div class='lbl'>1°A vs 3°(CEFHI)</div><div class='t win'><span class='n'>🇲🇽 México</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇪🇨 Ecuador</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>México</b> 2–1 a Ecuador</span><span class='odds'>60% · 1.66</span></div><div class='why'>Gana México por mejor ranking FIFA (1687 vs 1599 pts) y más gol esperado (1.9 vs 1.4). Probabilidad de pasar: 60% (cuota 1.66). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P80</span><span class='mdate'>📅 1 jul · Atlanta</span></div><div class='lbl'>1°L vs 3°(EHIJK)</div><div class='t win'><span class='n'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇺🇿 Uzbekistán</span><span class='gl'>0</span></div><div class='sc'><span>Gana <b>Inglaterra</b> 2–0 a Uzbekistán</span><span class='odds'>77% · 1.30</span></div><div class='why'>Gana Inglaterra por mejor ranking FIFA (1827 vs 1459 pts) y más gol esperado (2.4 vs 1.0). Probabilidad de pasar: 77% (cuota 1.30). Marcador más probable si gana: 2–0 (10% exacto).</div></div></div></div><div class='pair r'><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P86</span><span class='mdate'>📅 3 jul · Miami</span></div><div class='lbl'>1°J vs 2°H</div><div class='t win'><span class='n'>🇦🇷 Argentina</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇺🇾 Uruguay</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Argentina</b> 2–1 a Uruguay</span><span class='odds'>67% · 1.50</span></div><div class='why'>Gana Argentina por mejor ranking FIFA (1876 vs 1673 pts) y más gol esperado (2.0 vs 1.2). Probabilidad de pasar: 67% (cuota 1.50). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P88</span><span class='mdate'>📅 3 jul · Dallas</span></div><div class='lbl'>2°D vs 2°G</div><div class='t '><span class='n'>🇦🇺 Australia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇮🇷 Irán</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Irán</b> 2–1 a Australia</span><span class='odds'>58% · 1.71</span></div><div class='why'>Gana Irán por mejor ranking FIFA (1620 vs 1579 pts) y más gol esperado (1.9 vs 1.4). Probabilidad de pasar: 58% (cuota 1.71). Marcador más probable si gana: 2–1 (9% exacto).</div></div></div></div><div class='pair r'><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P85</span><span class='mdate'>📅 2 jul · Vancouver</span></div><div class='lbl'>1°B vs 3°(EFGIJ)</div><div class='t '><span class='n'>🇨🇭 Suiza</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇳🇴 Noruega</span><span class='gl'>2</span></div><div class='sc'><span>Gana <b>Noruega</b> 2–1 a Suiza</span><span class='odds'>51% · 1.97</span></div><div class='why'>Gana Noruega por aunque Suiza tiene mejor ranking (1650 vs 1557 pts), el modelo le da más gol esperado (1.8 vs 1.7) por sus resultados 2023–24. Probabilidad de pasar: 51% (cuota 1.97). Marcador más probable si gana: 2–1 (8% exacto).</div></div></div><div class='slot'><div class='m '><div class='mhead'><span class='mnum'>P87</span><span class='mdate'>📅 3 jul · Kansas City</span></div><div class='lbl'>1°K vs 3°(DEIJL)</div><div class='t win'><span class='n'>🇵🇹 Portugal</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇩🇿 Argelia</span><span class='gl'>1</span></div><div class='sc'><span>Gana <b>Portugal</b> 2–1 a Argelia</span><span class='odds'>65% · 1.55</span></div><div class='why'>Gana Portugal por mejor ranking FIFA (1766 vs 1571 pts) y más gol esperado (2.1 vs 1.3). Probabilidad de pasar: 65% (cuota 1.55). Marcador más probable si gana: 2–1 (10% exacto).</div></div></div></div></div></div><div class='col gcol'><div class='rnd'>Fase de grupos · 11–27 jun</div><div class='body'><div class='slot'><div class='gm'><div class='gmh'>GRUPO G</div><div class='mg'><div class='mghead'><span>J1 · 15 jun</span><span class='mgr'>Gana Bélgica 51%</span></div><div class='t win'><span class='n'>🇧🇪 Bélgica</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇪🇬 Egipto</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 16 jun</span><span class='mgr'>Gana Irán 67%</span></div><div class='t win'><span class='n'>🇮🇷 Irán</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇳🇿 N. Zelanda</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 21 jun</span><span class='mgr'>Gana Bélgica 43%</span></div><div class='t win'><span class='n'>🇧🇪 Bélgica</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇮🇷 Irán</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 22 jun</span><span class='mgr'>Gana Egipto 57%</span></div><div class='t '><span class='n'>🇳🇿 N. Zelanda</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇪🇬 Egipto</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J3 · 27 jun</span><span class='mgr'>Gana Bélgica 70%</span></div><div class='t '><span class='n'>🇳🇿 N. Zelanda</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇧🇪 Bélgica</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J3 · 27 jun</span><span class='mgr'>Gana Irán 47%</span></div><div class='t '><span class='n'>🇪🇬 Egipto</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇮🇷 Irán</span><span class='gl'>1</span></div></div><div class='gmq'>Avanzan: <b>Bélgica</b> y <b>Irán</b> + Egipto (3°)</div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO H</div><div class='mg'><div class='mghead'><span>J1 · 15 jun</span><span class='mgr'>Gana España 79%</span></div><div class='t win'><span class='n'>🇪🇸 España</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇨🇻 Cabo Verde</span><span class='gl'>0</span></div></div><div class='mg'><div class='mghead'><span>J1 · 16 jun</span><span class='mgr'>Gana Uruguay 57%</span></div><div class='t '><span class='n'>🇸🇦 A. Saudita</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇺🇾 Uruguay</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J2 · 21 jun</span><span class='mgr'>Gana España 76%</span></div><div class='t win'><span class='n'>🇪🇸 España</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇸🇦 A. Saudita</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 22 jun</span><span class='mgr'>Gana Uruguay 62%</span></div><div class='t win'><span class='n'>🇺🇾 Uruguay</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇨🇻 Cabo Verde</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 27 jun</span><span class='mgr'>Gana España 57%</span></div><div class='t '><span class='n'>🇺🇾 Uruguay</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇪🇸 España</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J3 · 27 jun</span><span class='mgr'>Gana A. Saudita 44%</span></div><div class='t '><span class='n'>🇨🇻 Cabo Verde</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇸🇦 A. Saudita</span><span class='gl'>1</span></div></div><div class='gmq'>Avanzan: <b>España</b> y <b>Uruguay</b></div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO I</div><div class='mg'><div class='mghead'><span>J1 · 16 jun</span><span class='mgr'>Gana Francia 51%</span></div><div class='t win'><span class='n'>🇫🇷 Francia</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇸🇳 Senegal</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 17 jun</span><span class='mgr'>Gana Noruega 57%</span></div><div class='t '><span class='n'>🇮🇶 Irak</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇳🇴 Noruega</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J2 · 22 jun</span><span class='mgr'>Gana Francia 71%</span></div><div class='t win'><span class='n'>🇫🇷 Francia</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇮🇶 Irak</span><span class='gl'>0</span></div></div><div class='mg'><div class='mghead'><span>J2 · 23 jun</span><span class='mgr'>Gana Senegal 42%</span></div><div class='t '><span class='n'>🇳🇴 Noruega</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇸🇳 Senegal</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 26 jun</span><span class='mgr'>Gana Senegal 58%</span></div><div class='t win'><span class='n'>🇸🇳 Senegal</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇮🇶 Irak</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 26 jun</span><span class='mgr'>Gana Francia 56%</span></div><div class='t '><span class='n'>🇳🇴 Noruega</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇫🇷 Francia</span><span class='gl'>2</span></div></div><div class='gmq'>Avanzan: <b>Francia</b> y <b>Senegal</b> + Noruega (3°)</div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO J</div><div class='mg'><div class='mghead'><span>J1 · 17 jun</span><span class='mgr'>Gana Argentina 63%</span></div><div class='t win'><span class='n'>🇦🇷 Argentina</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇩🇿 Argelia</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 17 jun</span><span class='mgr'>Gana Austria 63%</span></div><div class='t win'><span class='n'>🇦🇹 Austria</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇯🇴 Jordania</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 22 jun</span><span class='mgr'>Gana Argentina 58%</span></div><div class='t win'><span class='n'>🇦🇷 Argentina</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇦🇹 Austria</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 23 jun</span><span class='mgr'>Gana Argelia 58%</span></div><div class='t '><span class='n'>🇯🇴 Jordania</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇩🇿 Argelia</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J3 · 28 jun</span><span class='mgr'>Gana Argentina 80%</span></div><div class='t '><span class='n'>🇯🇴 Jordania</span><span class='gl'>0</span></div><div class='t win'><span class='n'>🇦🇷 Argentina</span><span class='gl'>3</span></div></div><div class='mg'><div class='mghead'><span>J3 · 28 jun</span><span class='mgr'>Gana Austria 43%</span></div><div class='t '><span class='n'>🇩🇿 Argelia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇦🇹 Austria</span><span class='gl'>1</span></div></div><div class='gmq'>Avanzan: <b>Argentina</b> y <b>Austria</b> + Argelia (3°)</div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO K</div><div class='mg'><div class='mghead'><span>J1 · 17 jun</span><span class='mgr'>Gana Portugal 68%</span></div><div class='t win'><span class='n'>🇵🇹 Portugal</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇨🇩 RD Congo</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 18 jun</span><span class='mgr'>Gana Colombia 58%</span></div><div class='t '><span class='n'>🇺🇿 Uzbekistán</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇨🇴 Colombia</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J2 · 23 jun</span><span class='mgr'>Gana Portugal 62%</span></div><div class='t win'><span class='n'>🇵🇹 Portugal</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇺🇿 Uzbekistán</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 24 jun</span><span class='mgr'>Gana Colombia 65%</span></div><div class='t win'><span class='n'>🇨🇴 Colombia</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇨🇩 RD Congo</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 28 jun</span><span class='mgr'>Gana Portugal 42%</span></div><div class='t '><span class='n'>🇨🇴 Colombia</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇵🇹 Portugal</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 28 jun</span><span class='mgr'>Gana Uzbekistán 45%</span></div><div class='t '><span class='n'>🇨🇩 RD Congo</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇺🇿 Uzbekistán</span><span class='gl'>1</span></div></div><div class='gmq'>Avanzan: <b>Portugal</b> y <b>Colombia</b> + Uzbekistán (3°)</div></div></div><div class='slot'><div class='gm'><div class='gmh'>GRUPO L</div><div class='mg'><div class='mghead'><span>J1 · 17 jun</span><span class='mgr'>Gana Inglaterra 50%</span></div><div class='t win'><span class='n'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='gl'>1</span></div><div class='t '><span class='n'>🇭🇷 Croacia</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J1 · 18 jun</span><span class='mgr'>Gana Panamá 46%</span></div><div class='t '><span class='n'>🇬🇭 Ghana</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇵🇦 Panamá</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J2 · 23 jun</span><span class='mgr'>Gana Inglaterra 77%</span></div><div class='t win'><span class='n'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇬🇭 Ghana</span><span class='gl'>0</span></div></div><div class='mg'><div class='mghead'><span>J2 · 24 jun</span><span class='mgr'>Gana Croacia 60%</span></div><div class='t '><span class='n'>🇵🇦 Panamá</span><span class='gl'>1</span></div><div class='t win'><span class='n'>🇭🇷 Croacia</span><span class='gl'>2</span></div></div><div class='mg'><div class='mghead'><span>J3 · 27 jun</span><span class='mgr'>Gana Croacia 67%</span></div><div class='t win'><span class='n'>🇭🇷 Croacia</span><span class='gl'>2</span></div><div class='t '><span class='n'>🇬🇭 Ghana</span><span class='gl'>1</span></div></div><div class='mg'><div class='mghead'><span>J3 · 27 jun</span><span class='mgr'>Gana Inglaterra 70%</span></div><div class='t '><span class='n'>🇵🇦 Panamá</span><span class='gl'>0</span></div><div class='t win'><span class='n'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='gl'>2</span></div></div><div class='gmq'>Avanzan: <b>Inglaterra</b> y <b>Croacia</b></div></div></div></div></div></div>
+<h2 class="sec" style="margin-top:28px">Fase de grupos · 11–27 jun (proyección)</h2>
+<div class="groups">
+    <div class='g'>
+      <div class='ghead'>GRUPO A</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='México vs Sudáfrica (11 jun): Gana México con 61% (cuota 1.65); marcador más probable 2–1 (10% exacto). Gana local 61% / empate 20% / gana visitante 19%'><span class='fd'>11 jun · HOY</span><span class='fa'>🇲🇽 México</span><span class='fs'>2–1</span><span class='fb'>Sudáfrica 🇿🇦</span><span class='fr'>Gana México <b>61%</b></span></div><div class='fx' title='Corea del Sur vs R. Checa (12 jun): Gana Corea del Sur con 44% (cuota 2.28); marcador más probable 1–1 (10% exacto). Gana local 44% / empate 23% / gana visitante 33%'><span class='fd'>12 jun</span><span class='fa'>🇰🇷 Corea del Sur</span><span class='fs'>1–1</span><span class='fb'>R. Checa 🇨🇿</span><span class='fr'>Gana Corea del Sur <b>44%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='R. Checa vs Sudáfrica (18 jun): Gana R. Checa con 46% (cuota 2.15); marcador más probable 1–1 (10% exacto). Gana local 46% / empate 23% / gana visitante 31%'><span class='fd'>18 jun</span><span class='fa'>🇨🇿 R. Checa</span><span class='fs'>1–1</span><span class='fb'>Sudáfrica 🇿🇦</span><span class='fr'>Gana R. Checa <b>46%</b></span></div><div class='fx' title='México vs Corea del Sur (19 jun): Gana México con 47% (cuota 2.11); marcador más probable 1–1 (10% exacto). Gana local 47% / empate 23% / gana visitante 30%'><span class='fd'>19 jun</span><span class='fa'>🇲🇽 México</span><span class='fs'>1–1</span><span class='fb'>Corea del Sur 🇰🇷</span><span class='fr'>Gana México <b>47%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Sudáfrica vs Corea del Sur (25 jun): Gana Corea del Sur con 52% (cuota 1.94); marcador más probable 1–1 (10% exacto). Gana local 26% / empate 22% / gana visitante 52%'><span class='fd'>25 jun</span><span class='fa'>🇿🇦 Sudáfrica</span><span class='fs'>1–1</span><span class='fb'>Corea del Sur 🇰🇷</span><span class='fr'>Gana Corea del Sur <b>52%</b></span></div><div class='fx' title='R. Checa vs México (25 jun): Gana México con 53% (cuota 1.88); marcador más probable 1–2 (9% exacto). Gana local 25% / empate 21% / gana visitante 53%'><span class='fd'>25 jun</span><span class='fa'>🇨🇿 R. Checa</span><span class='fs'>1–2</span><span class='fb'>México 🇲🇽</span><span class='fr'>Gana México <b>53%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇲🇽 México</td><td>5.5</td><td>+2.1</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇰🇷 Corea del Sur</td><td>4.4</td><td>+0.4</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q3'><td>3°</td><td>🇨🇿 R. Checa</td><td>3.8</td><td>-0.6</td><td><span class='tag'>Mejor 3°</span></td></tr><tr class='q0'><td>4°</td><td>🇿🇦 Sudáfrica</td><td>2.9</td><td>-2.0</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo B</h2>
-      <div class="match">
-        <div class="mdate">J1 · 12 jun</div>
-        <div class="teams">
-          <span class="team fav">🇨🇦 Canadá</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Bosnia 🇧🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:55.1%"></div>
-          <div class="bx" style="width:21.4%"></div>
-          <div class="b2" style="width:23.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Canadá 55%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Bosnia 24%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 13 jun</div>
-        <div class="teams">
-          <span class="team ">🇶🇦 Catar</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Suiza 🇨🇭</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:22.9%"></div>
-          <div class="bx" style="width:21.8%"></div>
-          <div class="b2" style="width:55.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Catar 23%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana Suiza 55%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 18 jun</div>
-        <div class="teams">
-          <span class="team fav">🇨🇭 Suiza</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Bosnia 🇧🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:62.4%"></div>
-          <div class="bx" style="width:19.5%"></div>
-          <div class="b2" style="width:18.1%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Suiza 62%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Bosnia 18%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 19 jun</div>
-        <div class="teams">
-          <span class="team fav">🇨🇦 Canadá</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Catar 🇶🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:48.0%"></div>
-          <div class="bx" style="width:23.1%"></div>
-          <div class="b2" style="width:29.0%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Canadá 48%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Catar 29%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 24 jun</div>
-        <div class="teams">
-          <span class="team ">🇧🇦 Bosnia</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Catar 🇶🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:32.0%"></div>
-          <div class="bx" style="width:23.2%"></div>
-          <div class="b2" style="width:44.8%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Bosnia 32%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Catar 45%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 24 jun</div>
-        <div class="teams">
-          <span class="team fav">🇨🇭 Suiza</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
-          <span class="team away ">Canadá 🇨🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:45.4%"></div>
-          <div class="bx" style="width:23.4%"></div>
-          <div class="b2" style="width:31.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Suiza 45%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Canadá 31%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇨🇭 Suiza</td><td>5.5</td><td>+2.2</td></tr><tr class='q1'><td>2</td><td>🇨🇦 Canadá</td><td>4.7</td><td>+0.9</td></tr><tr class='q3'><td>3</td><td>🇶🇦 Catar</td><td>3.6</td><td>-0.9</td></tr><tr class=''><td>4</td><td>🇧🇦 Bosnia</td><td>2.9</td><td>-2.2</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO B</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='Canadá vs Bosnia (12 jun): Gana Canadá con 55% (cuota 1.81); marcador más probable 2–1 (10% exacto). Gana local 55% / empate 21% / gana visitante 24%'><span class='fd'>12 jun</span><span class='fa'>🇨🇦 Canadá</span><span class='fs'>2–1</span><span class='fb'>Bosnia 🇧🇦</span><span class='fr'>Gana Canadá <b>55%</b></span></div><div class='fx' title='Catar vs Suiza (13 jun): Gana Suiza con 55% (cuota 1.81); marcador más probable 1–1 (10% exacto). Gana local 23% / empate 22% / gana visitante 55%'><span class='fd'>13 jun</span><span class='fa'>🇶🇦 Catar</span><span class='fs'>1–1</span><span class='fb'>Suiza 🇨🇭</span><span class='fr'>Gana Suiza <b>55%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='Suiza vs Bosnia (18 jun): Gana Suiza con 62% (cuota 1.60); marcador más probable 2–1 (10% exacto). Gana local 62% / empate 20% / gana visitante 18%'><span class='fd'>18 jun</span><span class='fa'>🇨🇭 Suiza</span><span class='fs'>2–1</span><span class='fb'>Bosnia 🇧🇦</span><span class='fr'>Gana Suiza <b>62%</b></span></div><div class='fx' title='Canadá vs Catar (19 jun): Gana Canadá con 48% (cuota 2.09); marcador más probable 1–1 (10% exacto). Gana local 48% / empate 23% / gana visitante 29%'><span class='fd'>19 jun</span><span class='fa'>🇨🇦 Canadá</span><span class='fs'>1–1</span><span class='fb'>Catar 🇶🇦</span><span class='fr'>Gana Canadá <b>48%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Bosnia vs Catar (24 jun): Gana Catar con 45% (cuota 2.23); marcador más probable 1–1 (10% exacto). Gana local 32% / empate 23% / gana visitante 45%'><span class='fd'>24 jun</span><span class='fa'>🇧🇦 Bosnia</span><span class='fs'>1–1</span><span class='fb'>Catar 🇶🇦</span><span class='fr'>Gana Catar <b>45%</b></span></div><div class='fx' title='Suiza vs Canadá (24 jun): Gana Suiza con 45% (cuota 2.20); marcador más probable 1–1 (11% exacto). Gana local 45% / empate 23% / gana visitante 31%'><span class='fd'>24 jun</span><span class='fa'>🇨🇭 Suiza</span><span class='fs'>1–1</span><span class='fb'>Canadá 🇨🇦</span><span class='fr'>Gana Suiza <b>45%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇨🇭 Suiza</td><td>5.5</td><td>+2.2</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇨🇦 Canadá</td><td>4.7</td><td>+0.9</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q3'><td>3°</td><td>🇶🇦 Catar</td><td>3.6</td><td>-0.9</td><td><span class='tag'>Mejor 3°</span></td></tr><tr class='q0'><td>4°</td><td>🇧🇦 Bosnia</td><td>2.9</td><td>-2.2</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo C</h2>
-      <div class="match">
-        <div class="mdate">J1 · 14 jun</div>
-        <div class="teams">
-          <span class="team ">🇧🇷 Brasil</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
-          <span class="team away fav">Marruecos 🇲🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:36.7%"></div>
-          <div class="bx" style="width:23.6%"></div>
-          <div class="b2" style="width:39.7%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Brasil 37%</span>
-          <span class="gx">Empate 24%</span>
-          <span class="g2">Gana Marruecos 40%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 14 jun</div>
-        <div class="teams">
-          <span class="team ">🇭🇹 Haití</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away fav">Escocia 🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:34.1%"></div>
-          <div class="bx" style="width:21.6%"></div>
-          <div class="b2" style="width:44.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Haití 34%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana Escocia 44%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 20 jun</div>
-        <div class="teams">
-          <span class="team ">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Marruecos 🇲🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:18.3%"></div>
-          <div class="bx" style="width:19.8%"></div>
-          <div class="b2" style="width:61.9%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Escocia 18%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Marruecos 62%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 20 jun</div>
-        <div class="teams">
-          <span class="team fav">🇧🇷 Brasil</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">Haití 🇭🇹</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:67.9%"></div>
-          <div class="bx" style="width:16.6%"></div>
-          <div class="b2" style="width:15.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Brasil 68%</span>
-          <span class="gx">Empate 17%</span>
-          <span class="g2">Gana Haití 16%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 25 jun</div>
-        <div class="teams">
-          <span class="team ">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Brasil 🇧🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:19.3%"></div>
-          <div class="bx" style="width:19.9%"></div>
-          <div class="b2" style="width:60.9%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Escocia 19%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Brasil 61%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 25 jun</div>
-        <div class="teams">
-          <span class="team fav">🇲🇦 Marruecos</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">Haití 🇭🇹</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:68.9%"></div>
-          <div class="bx" style="width:16.4%"></div>
-          <div class="b2" style="width:14.6%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Marruecos 69%</span>
-          <span class="gx">Empate 16%</span>
-          <span class="g2">Gana Haití 15%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇲🇦 Marruecos</td><td>5.7</td><td>+2.7</td></tr><tr class='q1'><td>2</td><td>🇧🇷 Brasil</td><td>5.6</td><td>+2.5</td></tr><tr class=''><td>3</td><td>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</td><td>3.1</td><td>-1.9</td></tr><tr class=''><td>4</td><td>🇭🇹 Haití</td><td>2.5</td><td>-3.3</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO C</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='Brasil vs Marruecos (14 jun): Gana Marruecos con 40% (cuota 2.52); marcador más probable 1–1 (11% exacto). Gana local 37% / empate 24% / gana visitante 40%'><span class='fd'>14 jun</span><span class='fa'>🇧🇷 Brasil</span><span class='fs'>1–1</span><span class='fb'>Marruecos 🇲🇦</span><span class='fr'>Gana Marruecos <b>40%</b></span></div><div class='fx' title='Haití vs Escocia (14 jun): Gana Escocia con 44% (cuota 2.26); marcador más probable 1–1 (9% exacto). Gana local 34% / empate 22% / gana visitante 44%'><span class='fd'>14 jun</span><span class='fa'>🇭🇹 Haití</span><span class='fs'>1–1</span><span class='fb'>Escocia 🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span class='fr'>Gana Escocia <b>44%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='Escocia vs Marruecos (20 jun): Gana Marruecos con 62% (cuota 1.61); marcador más probable 1–2 (10% exacto). Gana local 18% / empate 20% / gana visitante 62%'><span class='fd'>20 jun</span><span class='fa'>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span><span class='fs'>1–2</span><span class='fb'>Marruecos 🇲🇦</span><span class='fr'>Gana Marruecos <b>62%</b></span></div><div class='fx' title='Brasil vs Haití (20 jun): Gana Brasil con 68% (cuota 1.47); marcador más probable 2–1 (9% exacto). Gana local 68% / empate 17% / gana visitante 16%'><span class='fd'>20 jun</span><span class='fa'>🇧🇷 Brasil</span><span class='fs'>2–1</span><span class='fb'>Haití 🇭🇹</span><span class='fr'>Gana Brasil <b>68%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Escocia vs Brasil (25 jun): Gana Brasil con 61% (cuota 1.64); marcador más probable 1–2 (10% exacto). Gana local 19% / empate 20% / gana visitante 61%'><span class='fd'>25 jun</span><span class='fa'>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span><span class='fs'>1–2</span><span class='fb'>Brasil 🇧🇷</span><span class='fr'>Gana Brasil <b>61%</b></span></div><div class='fx' title='Marruecos vs Haití (25 jun): Gana Marruecos con 69% (cuota 1.45); marcador más probable 2–1 (9% exacto). Gana local 69% / empate 16% / gana visitante 15%'><span class='fd'>25 jun</span><span class='fa'>🇲🇦 Marruecos</span><span class='fs'>2–1</span><span class='fb'>Haití 🇭🇹</span><span class='fr'>Gana Marruecos <b>69%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇲🇦 Marruecos</td><td>5.7</td><td>+2.7</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇧🇷 Brasil</td><td>5.6</td><td>+2.5</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q0'><td>3°</td><td>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</td><td>3.1</td><td>-1.9</td><td><span class='tag'>Eliminado</span></td></tr><tr class='q0'><td>4°</td><td>🇭🇹 Haití</td><td>2.5</td><td>-3.3</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo D</h2>
-      <div class="match">
-        <div class="mdate">J1 · 13 jun</div>
-        <div class="teams">
-          <span class="team fav">🇺🇸 EE.UU.</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Paraguay 🇵🇾</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:55.3%"></div>
-          <div class="bx" style="width:20.9%"></div>
-          <div class="b2" style="width:23.7%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana EE.UU. 55%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Paraguay 24%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 14 jun</div>
-        <div class="teams">
-          <span class="team fav">🇦🇺 Australia</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Turquía 🇹🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:38.6%"></div>
-          <div class="bx" style="width:23.3%"></div>
-          <div class="b2" style="width:38.1%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Australia 39%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Turquía 38%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 19 jun</div>
-        <div class="teams">
-          <span class="team fav">🇺🇸 EE.UU.</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Australia 🇦🇺</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:42.7%"></div>
-          <div class="bx" style="width:23.1%"></div>
-          <div class="b2" style="width:34.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana EE.UU. 43%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Australia 34%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 20 jun</div>
-        <div class="teams">
-          <span class="team fav">🇹🇷 Turquía</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">Paraguay 🇵🇾</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:50.6%"></div>
-          <div class="bx" style="width:21.9%"></div>
-          <div class="b2" style="width:27.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Turquía 51%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana Paraguay 28%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 26 jun</div>
-        <div class="teams">
-          <span class="team ">🇹🇷 Turquía</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">EE.UU. 🇺🇸</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:34.2%"></div>
-          <div class="bx" style="width:22.5%"></div>
-          <div class="b2" style="width:43.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Turquía 34%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana EE.UU. 43%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 26 jun</div>
-        <div class="teams">
-          <span class="team ">🇵🇾 Paraguay</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Australia 🇦🇺</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:27.3%"></div>
-          <div class="bx" style="width:22.5%"></div>
-          <div class="b2" style="width:50.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Paraguay 27%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana Australia 50%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇺🇸 EE.UU.</td><td>4.9</td><td>+1.2</td></tr><tr class='q1'><td>2</td><td>🇦🇺 Australia</td><td>4.4</td><td>+0.4</td></tr><tr class='q3'><td>3</td><td>🇹🇷 Turquía</td><td>4.4</td><td>+0.3</td></tr><tr class=''><td>4</td><td>🇵🇾 Paraguay</td><td>3.0</td><td>-1.9</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO D</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='EE.UU. vs Paraguay (13 jun): Gana EE.UU. con 55% (cuota 1.81); marcador más probable 2–1 (10% exacto). Gana local 55% / empate 21% / gana visitante 24%'><span class='fd'>13 jun</span><span class='fa'>🇺🇸 EE.UU.</span><span class='fs'>2–1</span><span class='fb'>Paraguay 🇵🇾</span><span class='fr'>Gana EE.UU. <b>55%</b></span></div><div class='fx' title='Australia vs Turquía (14 jun): Gana Australia con 39% (cuota 2.59); marcador más probable 1–1 (10% exacto). Gana local 39% / empate 23% / gana visitante 38%'><span class='fd'>14 jun</span><span class='fa'>🇦🇺 Australia</span><span class='fs'>1–1</span><span class='fb'>Turquía 🇹🇷</span><span class='fr'>Gana Australia <b>39%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='EE.UU. vs Australia (19 jun): Gana EE.UU. con 43% (cuota 2.34); marcador más probable 1–1 (10% exacto). Gana local 43% / empate 23% / gana visitante 34%'><span class='fd'>19 jun</span><span class='fa'>🇺🇸 EE.UU.</span><span class='fs'>1–1</span><span class='fb'>Australia 🇦🇺</span><span class='fr'>Gana EE.UU. <b>43%</b></span></div><div class='fx' title='Turquía vs Paraguay (20 jun): Gana Turquía con 51% (cuota 1.98); marcador más probable 1–1 (9% exacto). Gana local 51% / empate 22% / gana visitante 28%'><span class='fd'>20 jun</span><span class='fa'>🇹🇷 Turquía</span><span class='fs'>1–1</span><span class='fb'>Paraguay 🇵🇾</span><span class='fr'>Gana Turquía <b>51%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Turquía vs EE.UU. (26 jun): Gana EE.UU. con 43% (cuota 2.31); marcador más probable 1–1 (10% exacto). Gana local 34% / empate 22% / gana visitante 43%'><span class='fd'>26 jun</span><span class='fa'>🇹🇷 Turquía</span><span class='fs'>1–1</span><span class='fb'>EE.UU. 🇺🇸</span><span class='fr'>Gana EE.UU. <b>43%</b></span></div><div class='fx' title='Paraguay vs Australia (26 jun): Gana Australia con 50% (cuota 1.99); marcador más probable 1–1 (10% exacto). Gana local 27% / empate 22% / gana visitante 50%'><span class='fd'>26 jun</span><span class='fa'>🇵🇾 Paraguay</span><span class='fs'>1–1</span><span class='fb'>Australia 🇦🇺</span><span class='fr'>Gana Australia <b>50%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇺🇸 EE.UU.</td><td>4.9</td><td>+1.2</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇦🇺 Australia</td><td>4.4</td><td>+0.4</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q3'><td>3°</td><td>🇹🇷 Turquía</td><td>4.4</td><td>+0.3</td><td><span class='tag'>Mejor 3°</span></td></tr><tr class='q0'><td>4°</td><td>🇵🇾 Paraguay</td><td>3.0</td><td>-1.9</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo E</h2>
-      <div class="match">
-        <div class="mdate">J1 · 14 jun</div>
-        <div class="teams">
-          <span class="team fav">🇩🇪 Alemania</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">Curazao 🇨🇼</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:71.3%"></div>
-          <div class="bx" style="width:15.9%"></div>
-          <div class="b2" style="width:12.8%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Alemania 71%</span>
-          <span class="gx">Empate 16%</span>
-          <span class="g2">Gana Curazao 13%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 15 jun</div>
-        <div class="teams">
-          <span class="team fav">🇨🇮 C. de Marfil</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
-          <span class="team away ">Ecuador 🇪🇨</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:39.2%"></div>
-          <div class="bx" style="width:24.0%"></div>
-          <div class="b2" style="width:36.7%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana C. de Marfil 39%</span>
-          <span class="gx">Empate 24%</span>
-          <span class="g2">Gana Ecuador 37%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 20 jun</div>
-        <div class="teams">
-          <span class="team fav">🇩🇪 Alemania</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">C. de Marfil 🇨🇮</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:53.0%"></div>
-          <div class="bx" style="width:22.2%"></div>
-          <div class="b2" style="width:24.8%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Alemania 53%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana C. de Marfil 25%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 21 jun</div>
-        <div class="teams">
-          <span class="team fav">🇪🇨 Ecuador</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Curazao 🇨🇼</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:55.0%"></div>
-          <div class="bx" style="width:21.0%"></div>
-          <div class="b2" style="width:24.0%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Ecuador 55%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Curazao 24%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 25 jun</div>
-        <div class="teams">
-          <span class="team ">🇪🇨 Ecuador</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Alemania 🇩🇪</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:23.8%"></div>
-          <div class="bx" style="width:21.7%"></div>
-          <div class="b2" style="width:54.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Ecuador 24%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana Alemania 55%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 25 jun</div>
-        <div class="teams">
-          <span class="team ">🇨🇼 Curazao</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">C. de Marfil 🇨🇮</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:23.0%"></div>
-          <div class="bx" style="width:20.9%"></div>
-          <div class="b2" style="width:56.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Curazao 23%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana C. de Marfil 56%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇩🇪 Alemania</td><td>6.0</td><td>+3.1</td></tr><tr class='q1'><td>2</td><td>🇨🇮 C. de Marfil</td><td>4.3</td><td>+0.2</td></tr><tr class='q3'><td>3</td><td>🇪🇨 Ecuador</td><td>4.1</td><td>-0.0</td></tr><tr class=''><td>4</td><td>🇨🇼 Curazao</td><td>2.4</td><td>-3.2</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO E</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='Alemania vs Curazao (14 jun): Gana Alemania con 71% (cuota 1.40); marcador más probable 2–1 (9% exacto). Gana local 71% / empate 16% / gana visitante 13%'><span class='fd'>14 jun</span><span class='fa'>🇩🇪 Alemania</span><span class='fs'>2–1</span><span class='fb'>Curazao 🇨🇼</span><span class='fr'>Gana Alemania <b>71%</b></span></div><div class='fx' title='C. de Marfil vs Ecuador (15 jun): Gana C. de Marfil con 39% (cuota 2.55); marcador más probable 1–1 (11% exacto). Gana local 39% / empate 24% / gana visitante 37%'><span class='fd'>15 jun</span><span class='fa'>🇨🇮 C. de Marfil</span><span class='fs'>1–1</span><span class='fb'>Ecuador 🇪🇨</span><span class='fr'>Gana C. de Marfil <b>39%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='Alemania vs C. de Marfil (20 jun): Gana Alemania con 53% (cuota 1.89); marcador más probable 1–1 (10% exacto). Gana local 53% / empate 22% / gana visitante 25%'><span class='fd'>20 jun</span><span class='fa'>🇩🇪 Alemania</span><span class='fs'>1–1</span><span class='fb'>C. de Marfil 🇨🇮</span><span class='fr'>Gana Alemania <b>53%</b></span></div><div class='fx' title='Ecuador vs Curazao (21 jun): Gana Ecuador con 55% (cuota 1.82); marcador más probable 2–1 (10% exacto). Gana local 55% / empate 21% / gana visitante 24%'><span class='fd'>21 jun</span><span class='fa'>🇪🇨 Ecuador</span><span class='fs'>2–1</span><span class='fb'>Curazao 🇨🇼</span><span class='fr'>Gana Ecuador <b>55%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Ecuador vs Alemania (25 jun): Gana Alemania con 55% (cuota 1.83); marcador más probable 1–2 (10% exacto). Gana local 24% / empate 22% / gana visitante 55%'><span class='fd'>25 jun</span><span class='fa'>🇪🇨 Ecuador</span><span class='fs'>1–2</span><span class='fb'>Alemania 🇩🇪</span><span class='fr'>Gana Alemania <b>55%</b></span></div><div class='fx' title='Curazao vs C. de Marfil (25 jun): Gana C. de Marfil con 56% (cuota 1.78); marcador más probable 1–2 (10% exacto). Gana local 23% / empate 21% / gana visitante 56%'><span class='fd'>25 jun</span><span class='fa'>🇨🇼 Curazao</span><span class='fs'>1–2</span><span class='fb'>C. de Marfil 🇨🇮</span><span class='fr'>Gana C. de Marfil <b>56%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇩🇪 Alemania</td><td>6.0</td><td>+3.1</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇨🇮 C. de Marfil</td><td>4.3</td><td>+0.2</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q3'><td>3°</td><td>🇪🇨 Ecuador</td><td>4.1</td><td>-0.0</td><td><span class='tag'>Mejor 3°</span></td></tr><tr class='q0'><td>4°</td><td>🇨🇼 Curazao</td><td>2.4</td><td>-3.2</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo F</h2>
-      <div class="match">
-        <div class="mdate">J1 · 14 jun</div>
-        <div class="teams">
-          <span class="team fav">🇳🇱 P. Bajos</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">Japón 🇯🇵</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:45.3%"></div>
-          <div class="bx" style="width:21.6%"></div>
-          <div class="b2" style="width:33.1%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana P. Bajos 45%</span>
-          <span class="gx">Empate 22%</span>
-          <span class="g2">Gana Japón 33%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 15 jun</div>
-        <div class="teams">
-          <span class="team ">🇸🇪 Suecia</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
-          <span class="team away fav">Túnez 🇹🇳</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:36.0%"></div>
-          <div class="bx" style="width:23.7%"></div>
-          <div class="b2" style="width:40.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Suecia 36%</span>
-          <span class="gx">Empate 24%</span>
-          <span class="g2">Gana Túnez 40%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 20 jun</div>
-        <div class="teams">
-          <span class="team fav">🇳🇱 P. Bajos</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">Suecia 🇸🇪</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:64.0%"></div>
-          <div class="bx" style="width:18.3%"></div>
-          <div class="b2" style="width:17.7%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana P. Bajos 64%</span>
-          <span class="gx">Empate 18%</span>
-          <span class="g2">Gana Suecia 18%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 21 jun</div>
-        <div class="teams">
-          <span class="team ">🇹🇳 Túnez</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Japón 🇯🇵</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:23.9%"></div>
-          <div class="bx" style="width:21.3%"></div>
-          <div class="b2" style="width:54.8%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Túnez 24%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Japón 55%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 26 jun</div>
-        <div class="teams">
-          <span class="team fav">🇯🇵 Japón</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">Suecia 🇸🇪</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:58.9%"></div>
-          <div class="bx" style="width:19.2%"></div>
-          <div class="b2" style="width:21.9%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Japón 59%</span>
-          <span class="gx">Empate 19%</span>
-          <span class="g2">Gana Suecia 22%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 26 jun</div>
-        <div class="teams">
-          <span class="team ">🇹🇳 Túnez</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">P. Bajos 🇳🇱</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:19.6%"></div>
-          <div class="bx" style="width:20.6%"></div>
-          <div class="b2" style="width:59.8%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Túnez 20%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana P. Bajos 60%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇳🇱 P. Bajos</td><td>5.7</td><td>+2.5</td></tr><tr class='q1'><td>2</td><td>🇯🇵 Japón</td><td>5.0</td><td>+1.4</td></tr><tr class=''><td>3</td><td>🇹🇳 Túnez</td><td>3.2</td><td>-1.7</td></tr><tr class=''><td>4</td><td>🇸🇪 Suecia</td><td>2.9</td><td>-2.3</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO F</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='P. Bajos vs Japón (14 jun): Gana P. Bajos con 45% (cuota 2.21); marcador más probable 1–1 (9% exacto). Gana local 45% / empate 22% / gana visitante 33%'><span class='fd'>14 jun</span><span class='fa'>🇳🇱 P. Bajos</span><span class='fs'>1–1</span><span class='fb'>Japón 🇯🇵</span><span class='fr'>Gana P. Bajos <b>45%</b></span></div><div class='fx' title='Suecia vs Túnez (15 jun): Gana Túnez con 40% (cuota 2.48); marcador más probable 1–1 (11% exacto). Gana local 36% / empate 24% / gana visitante 40%'><span class='fd'>15 jun</span><span class='fa'>🇸🇪 Suecia</span><span class='fs'>1–1</span><span class='fb'>Túnez 🇹🇳</span><span class='fr'>Gana Túnez <b>40%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='P. Bajos vs Suecia (20 jun): Gana P. Bajos con 64% (cuota 1.56); marcador más probable 2–1 (9% exacto). Gana local 64% / empate 18% / gana visitante 18%'><span class='fd'>20 jun</span><span class='fa'>🇳🇱 P. Bajos</span><span class='fs'>2–1</span><span class='fb'>Suecia 🇸🇪</span><span class='fr'>Gana P. Bajos <b>64%</b></span></div><div class='fx' title='Túnez vs Japón (21 jun): Gana Japón con 55% (cuota 1.82); marcador más probable 1–2 (10% exacto). Gana local 24% / empate 21% / gana visitante 55%'><span class='fd'>21 jun</span><span class='fa'>🇹🇳 Túnez</span><span class='fs'>1–2</span><span class='fb'>Japón 🇯🇵</span><span class='fr'>Gana Japón <b>55%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Japón vs Suecia (26 jun): Gana Japón con 59% (cuota 1.70); marcador más probable 2–1 (9% exacto). Gana local 59% / empate 19% / gana visitante 22%'><span class='fd'>26 jun</span><span class='fa'>🇯🇵 Japón</span><span class='fs'>2–1</span><span class='fb'>Suecia 🇸🇪</span><span class='fr'>Gana Japón <b>59%</b></span></div><div class='fx' title='Túnez vs P. Bajos (26 jun): Gana P. Bajos con 60% (cuota 1.67); marcador más probable 1–2 (10% exacto). Gana local 20% / empate 21% / gana visitante 60%'><span class='fd'>26 jun</span><span class='fa'>🇹🇳 Túnez</span><span class='fs'>1–2</span><span class='fb'>P. Bajos 🇳🇱</span><span class='fr'>Gana P. Bajos <b>60%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇳🇱 P. Bajos</td><td>5.7</td><td>+2.5</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇯🇵 Japón</td><td>5.0</td><td>+1.4</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q0'><td>3°</td><td>🇹🇳 Túnez</td><td>3.2</td><td>-1.7</td><td><span class='tag'>Eliminado</span></td></tr><tr class='q0'><td>4°</td><td>🇸🇪 Suecia</td><td>2.9</td><td>-2.3</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo G</h2>
-      <div class="match">
-        <div class="mdate">J1 · 15 jun</div>
-        <div class="teams">
-          <span class="team fav">🇧🇪 Bélgica</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Egipto 🇪🇬</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:51.2%"></div>
-          <div class="bx" style="width:22.6%"></div>
-          <div class="b2" style="width:26.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Bélgica 51%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Egipto 26%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 16 jun</div>
-        <div class="teams">
-          <span class="team fav">🇮🇷 Irán</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">N. Zelanda 🇳🇿</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:66.5%"></div>
-          <div class="bx" style="width:17.4%"></div>
-          <div class="b2" style="width:16.1%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Irán 67%</span>
-          <span class="gx">Empate 17%</span>
-          <span class="g2">Gana N. Zelanda 16%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 21 jun</div>
-        <div class="teams">
-          <span class="team fav">🇧🇪 Bélgica</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Irán 🇮🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:43.4%"></div>
-          <div class="bx" style="width:22.8%"></div>
-          <div class="b2" style="width:33.8%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Bélgica 43%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Irán 34%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 22 jun</div>
-        <div class="teams">
-          <span class="team ">🇳🇿 N. Zelanda</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Egipto 🇪🇬</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:22.2%"></div>
-          <div class="bx" style="width:20.6%"></div>
-          <div class="b2" style="width:57.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana N. Zelanda 22%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Egipto 57%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 27 jun</div>
-        <div class="teams">
-          <span class="team ">🇳🇿 N. Zelanda</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away fav">Bélgica 🇧🇪</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:13.3%"></div>
-          <div class="bx" style="width:16.2%"></div>
-          <div class="b2" style="width:70.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana N. Zelanda 13%</span>
-          <span class="gx">Empate 16%</span>
-          <span class="g2">Gana Bélgica 70%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 27 jun</div>
-        <div class="teams">
-          <span class="team ">🇪🇬 Egipto</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Irán 🇮🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:30.5%"></div>
-          <div class="bx" style="width:22.8%"></div>
-          <div class="b2" style="width:46.7%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Egipto 31%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Irán 47%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇧🇪 Bélgica</td><td>5.6</td><td>+2.4</td></tr><tr class='q1'><td>2</td><td>🇮🇷 Irán</td><td>5.0</td><td>+1.5</td></tr><tr class='q3'><td>3</td><td>🇪🇬 Egipto</td><td>4.1</td><td>-0.1</td></tr><tr class=''><td>4</td><td>🇳🇿 N. Zelanda</td><td>2.1</td><td>-3.8</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO G</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='Bélgica vs Egipto (15 jun): Gana Bélgica con 51% (cuota 1.95); marcador más probable 1–1 (10% exacto). Gana local 51% / empate 23% / gana visitante 26%'><span class='fd'>15 jun</span><span class='fa'>🇧🇪 Bélgica</span><span class='fs'>1–1</span><span class='fb'>Egipto 🇪🇬</span><span class='fr'>Gana Bélgica <b>51%</b></span></div><div class='fx' title='Irán vs N. Zelanda (16 jun): Gana Irán con 67% (cuota 1.50); marcador más probable 2–1 (9% exacto). Gana local 67% / empate 17% / gana visitante 16%'><span class='fd'>16 jun</span><span class='fa'>🇮🇷 Irán</span><span class='fs'>2–1</span><span class='fb'>N. Zelanda 🇳🇿</span><span class='fr'>Gana Irán <b>67%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='Bélgica vs Irán (21 jun): Gana Bélgica con 43% (cuota 2.30); marcador más probable 1–1 (10% exacto). Gana local 43% / empate 23% / gana visitante 34%'><span class='fd'>21 jun</span><span class='fa'>🇧🇪 Bélgica</span><span class='fs'>1–1</span><span class='fb'>Irán 🇮🇷</span><span class='fr'>Gana Bélgica <b>43%</b></span></div><div class='fx' title='N. Zelanda vs Egipto (22 jun): Gana Egipto con 57% (cuota 1.75); marcador más probable 1–2 (10% exacto). Gana local 22% / empate 21% / gana visitante 57%'><span class='fd'>22 jun</span><span class='fa'>🇳🇿 N. Zelanda</span><span class='fs'>1–2</span><span class='fb'>Egipto 🇪🇬</span><span class='fr'>Gana Egipto <b>57%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='N. Zelanda vs Bélgica (27 jun): Gana Bélgica con 70% (cuota 1.42); marcador más probable 1–2 (9% exacto). Gana local 13% / empate 16% / gana visitante 70%'><span class='fd'>27 jun</span><span class='fa'>🇳🇿 N. Zelanda</span><span class='fs'>1–2</span><span class='fb'>Bélgica 🇧🇪</span><span class='fr'>Gana Bélgica <b>70%</b></span></div><div class='fx' title='Egipto vs Irán (27 jun): Gana Irán con 47% (cuota 2.14); marcador más probable 1–1 (10% exacto). Gana local 31% / empate 23% / gana visitante 47%'><span class='fd'>27 jun</span><span class='fa'>🇪🇬 Egipto</span><span class='fs'>1–1</span><span class='fb'>Irán 🇮🇷</span><span class='fr'>Gana Irán <b>47%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇧🇪 Bélgica</td><td>5.6</td><td>+2.4</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇮🇷 Irán</td><td>5.0</td><td>+1.5</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q3'><td>3°</td><td>🇪🇬 Egipto</td><td>4.1</td><td>-0.1</td><td><span class='tag'>Mejor 3°</span></td></tr><tr class='q0'><td>4°</td><td>🇳🇿 N. Zelanda</td><td>2.1</td><td>-3.8</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo H</h2>
-      <div class="match">
-        <div class="mdate">J1 · 15 jun</div>
-        <div class="teams">
-          <span class="team fav">🇪🇸 España</span>
-          <span class="scorebox"><span class="score">2 – 0</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Cabo Verde 🇨🇻</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:79.0%"></div>
-          <div class="bx" style="width:12.9%"></div>
-          <div class="b2" style="width:8.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana España 79%</span>
-          <span class="gx">Empate 13%</span>
-          <span class="g2">Gana Cabo Verde 8%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 16 jun</div>
-        <div class="teams">
-          <span class="team ">🇸🇦 A. Saudita</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Uruguay 🇺🇾</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:21.8%"></div>
-          <div class="bx" style="width:20.7%"></div>
-          <div class="b2" style="width:57.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana A. Saudita 22%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Uruguay 57%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 21 jun</div>
-        <div class="teams">
-          <span class="team fav">🇪🇸 España</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">A. Saudita 🇸🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:76.1%"></div>
-          <div class="bx" style="width:13.8%"></div>
-          <div class="b2" style="width:10.1%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana España 76%</span>
-          <span class="gx">Empate 14%</span>
-          <span class="g2">Gana A. Saudita 10%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 22 jun</div>
-        <div class="teams">
-          <span class="team fav">🇺🇾 Uruguay</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Cabo Verde 🇨🇻</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:61.6%"></div>
-          <div class="bx" style="width:20.2%"></div>
-          <div class="b2" style="width:18.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Uruguay 62%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Cabo Verde 18%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 27 jun</div>
-        <div class="teams">
-          <span class="team ">🇺🇾 Uruguay</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">España 🇪🇸</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:22.0%"></div>
-          <div class="bx" style="width:20.8%"></div>
-          <div class="b2" style="width:57.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Uruguay 22%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana España 57%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 27 jun</div>
-        <div class="teams">
-          <span class="team ">🇨🇻 Cabo Verde</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">A. Saudita 🇸🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:33.2%"></div>
-          <div class="bx" style="width:23.1%"></div>
-          <div class="b2" style="width:43.6%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Cabo Verde 33%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana A. Saudita 44%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇪🇸 España</td><td>6.8</td><td>+4.9</td></tr><tr class='q1'><td>2</td><td>🇺🇾 Uruguay</td><td>4.8</td><td>+1.1</td></tr><tr class=''><td>3</td><td>🇸🇦 A. Saudita</td><td>2.8</td><td>-2.6</td></tr><tr class=''><td>4</td><td>🇨🇻 Cabo Verde</td><td>2.3</td><td>-3.4</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO H</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='España vs Cabo Verde (15 jun): Gana España con 79% (cuota 1.27); marcador más probable 2–0 (10% exacto). Gana local 79% / empate 13% / gana visitante 8%'><span class='fd'>15 jun</span><span class='fa'>🇪🇸 España</span><span class='fs'>2–0</span><span class='fb'>Cabo Verde 🇨🇻</span><span class='fr'>Gana España <b>79%</b></span></div><div class='fx' title='A. Saudita vs Uruguay (16 jun): Gana Uruguay con 57% (cuota 1.74); marcador más probable 1–2 (10% exacto). Gana local 22% / empate 21% / gana visitante 57%'><span class='fd'>16 jun</span><span class='fa'>🇸🇦 A. Saudita</span><span class='fs'>1–2</span><span class='fb'>Uruguay 🇺🇾</span><span class='fr'>Gana Uruguay <b>57%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='España vs A. Saudita (21 jun): Gana España con 76% (cuota 1.31); marcador más probable 2–1 (9% exacto). Gana local 76% / empate 14% / gana visitante 10%'><span class='fd'>21 jun</span><span class='fa'>🇪🇸 España</span><span class='fs'>2–1</span><span class='fb'>A. Saudita 🇸🇦</span><span class='fr'>Gana España <b>76%</b></span></div><div class='fx' title='Uruguay vs Cabo Verde (22 jun): Gana Uruguay con 62% (cuota 1.62); marcador más probable 2–1 (10% exacto). Gana local 62% / empate 20% / gana visitante 18%'><span class='fd'>22 jun</span><span class='fa'>🇺🇾 Uruguay</span><span class='fs'>2–1</span><span class='fb'>Cabo Verde 🇨🇻</span><span class='fr'>Gana Uruguay <b>62%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Uruguay vs España (27 jun): Gana España con 57% (cuota 1.75); marcador más probable 1–2 (10% exacto). Gana local 22% / empate 21% / gana visitante 57%'><span class='fd'>27 jun</span><span class='fa'>🇺🇾 Uruguay</span><span class='fs'>1–2</span><span class='fb'>España 🇪🇸</span><span class='fr'>Gana España <b>57%</b></span></div><div class='fx' title='Cabo Verde vs A. Saudita (27 jun): Gana A. Saudita con 44% (cuota 2.29); marcador más probable 1–1 (10% exacto). Gana local 33% / empate 23% / gana visitante 44%'><span class='fd'>27 jun</span><span class='fa'>🇨🇻 Cabo Verde</span><span class='fs'>1–1</span><span class='fb'>A. Saudita 🇸🇦</span><span class='fr'>Gana A. Saudita <b>44%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇪🇸 España</td><td>6.8</td><td>+4.9</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇺🇾 Uruguay</td><td>4.8</td><td>+1.1</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q0'><td>3°</td><td>🇸🇦 A. Saudita</td><td>2.8</td><td>-2.6</td><td><span class='tag'>Eliminado</span></td></tr><tr class='q0'><td>4°</td><td>🇨🇻 Cabo Verde</td><td>2.3</td><td>-3.4</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo I</h2>
-      <div class="match">
-        <div class="mdate">J1 · 16 jun</div>
-        <div class="teams">
-          <span class="team fav">🇫🇷 Francia</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
-          <span class="team away ">Senegal 🇸🇳</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:50.5%"></div>
-          <div class="bx" style="width:23.4%"></div>
-          <div class="b2" style="width:26.0%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Francia 51%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Senegal 26%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 17 jun</div>
-        <div class="teams">
-          <span class="team ">🇮🇶 Irak</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away fav">Noruega 🇳🇴</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:23.2%"></div>
-          <div class="bx" style="width:20.0%"></div>
-          <div class="b2" style="width:56.9%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Irak 23%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Noruega 57%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 22 jun</div>
-        <div class="teams">
-          <span class="team fav">🇫🇷 Francia</span>
-          <span class="scorebox"><span class="score">2 – 0</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Irak 🇮🇶</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:71.2%"></div>
-          <div class="bx" style="width:16.4%"></div>
-          <div class="b2" style="width:12.4%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Francia 71%</span>
-          <span class="gx">Empate 16%</span>
-          <span class="g2">Gana Irak 12%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 23 jun</div>
-        <div class="teams">
-          <span class="team ">🇳🇴 Noruega</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Senegal 🇸🇳</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:35.3%"></div>
-          <div class="bx" style="width:23.1%"></div>
-          <div class="b2" style="width:41.6%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Noruega 35%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Senegal 42%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 26 jun</div>
-        <div class="teams">
-          <span class="team fav">🇸🇳 Senegal</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Irak 🇮🇶</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:57.6%"></div>
-          <div class="bx" style="width:21.4%"></div>
-          <div class="b2" style="width:21.0%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Senegal 58%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Irak 21%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 26 jun</div>
-        <div class="teams">
-          <span class="team ">🇳🇴 Noruega</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away fav">Francia 🇫🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:23.4%"></div>
-          <div class="bx" style="width:20.4%"></div>
-          <div class="b2" style="width:56.1%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Noruega 23%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Francia 56%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇫🇷 Francia</td><td>5.9</td><td>+3.0</td></tr><tr class='q1'><td>2</td><td>🇸🇳 Senegal</td><td>4.4</td><td>+0.5</td></tr><tr class='q3'><td>3</td><td>🇳🇴 Noruega</td><td>4.1</td><td>-0.1</td></tr><tr class=''><td>4</td><td>🇮🇶 Irak</td><td>2.3</td><td>-3.4</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO I</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='Francia vs Senegal (16 jun): Gana Francia con 51% (cuota 1.98); marcador más probable 1–1 (11% exacto). Gana local 51% / empate 23% / gana visitante 26%'><span class='fd'>16 jun</span><span class='fa'>🇫🇷 Francia</span><span class='fs'>1–1</span><span class='fb'>Senegal 🇸🇳</span><span class='fr'>Gana Francia <b>51%</b></span></div><div class='fx' title='Irak vs Noruega (17 jun): Gana Noruega con 57% (cuota 1.76); marcador más probable 1–2 (9% exacto). Gana local 23% / empate 20% / gana visitante 57%'><span class='fd'>17 jun</span><span class='fa'>🇮🇶 Irak</span><span class='fs'>1–2</span><span class='fb'>Noruega 🇳🇴</span><span class='fr'>Gana Noruega <b>57%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='Francia vs Irak (22 jun): Gana Francia con 71% (cuota 1.40); marcador más probable 2–0 (10% exacto). Gana local 71% / empate 16% / gana visitante 12%'><span class='fd'>22 jun</span><span class='fa'>🇫🇷 Francia</span><span class='fs'>2–0</span><span class='fb'>Irak 🇮🇶</span><span class='fr'>Gana Francia <b>71%</b></span></div><div class='fx' title='Noruega vs Senegal (23 jun): Gana Senegal con 42% (cuota 2.40); marcador más probable 1–1 (10% exacto). Gana local 35% / empate 23% / gana visitante 42%'><span class='fd'>23 jun</span><span class='fa'>🇳🇴 Noruega</span><span class='fs'>1–1</span><span class='fb'>Senegal 🇸🇳</span><span class='fr'>Gana Senegal <b>42%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Senegal vs Irak (26 jun): Gana Senegal con 58% (cuota 1.74); marcador más probable 2–1 (10% exacto). Gana local 58% / empate 21% / gana visitante 21%'><span class='fd'>26 jun</span><span class='fa'>🇸🇳 Senegal</span><span class='fs'>2–1</span><span class='fb'>Irak 🇮🇶</span><span class='fr'>Gana Senegal <b>58%</b></span></div><div class='fx' title='Noruega vs Francia (26 jun): Gana Francia con 56% (cuota 1.78); marcador más probable 1–2 (9% exacto). Gana local 23% / empate 20% / gana visitante 56%'><span class='fd'>26 jun</span><span class='fa'>🇳🇴 Noruega</span><span class='fs'>1–2</span><span class='fb'>Francia 🇫🇷</span><span class='fr'>Gana Francia <b>56%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇫🇷 Francia</td><td>5.9</td><td>+3.0</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇸🇳 Senegal</td><td>4.4</td><td>+0.5</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q3'><td>3°</td><td>🇳🇴 Noruega</td><td>4.1</td><td>-0.1</td><td><span class='tag'>Mejor 3°</span></td></tr><tr class='q0'><td>4°</td><td>🇮🇶 Irak</td><td>2.3</td><td>-3.4</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo J</h2>
-      <div class="match">
-        <div class="mdate">J1 · 17 jun</div>
-        <div class="teams">
-          <span class="team fav">🇦🇷 Argentina</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Argelia 🇩🇿</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:63.0%"></div>
-          <div class="bx" style="width:19.6%"></div>
-          <div class="b2" style="width:17.4%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Argentina 63%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Argelia 17%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 17 jun</div>
-        <div class="teams">
-          <span class="team fav">🇦🇹 Austria</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
-          <span class="team away ">Jordania 🇯🇴</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:62.7%"></div>
-          <div class="bx" style="width:18.7%"></div>
-          <div class="b2" style="width:18.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Austria 63%</span>
-          <span class="gx">Empate 19%</span>
-          <span class="g2">Gana Jordania 19%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 22 jun</div>
-        <div class="teams">
-          <span class="team fav">🇦🇷 Argentina</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Austria 🇦🇹</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:58.5%"></div>
-          <div class="bx" style="width:20.8%"></div>
-          <div class="b2" style="width:20.7%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Argentina 58%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Austria 21%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 23 jun</div>
-        <div class="teams">
-          <span class="team ">🇯🇴 Jordania</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Argelia 🇩🇿</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:22.2%"></div>
-          <div class="bx" style="width:20.3%"></div>
-          <div class="b2" style="width:57.6%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Jordania 22%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Argelia 58%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 28 jun</div>
-        <div class="teams">
-          <span class="team ">🇯🇴 Jordania</span>
-          <span class="scorebox"><span class="score">0 – 3</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Argentina 🇦🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:7.9%"></div>
-          <div class="bx" style="width:12.5%"></div>
-          <div class="b2" style="width:79.6%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Jordania 8%</span>
-          <span class="gx">Empate 13%</span>
-          <span class="g2">Gana Argentina 80%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 28 jun</div>
-        <div class="teams">
-          <span class="team ">🇩🇿 Argelia</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Austria 🇦🇹</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:33.7%"></div>
-          <div class="bx" style="width:23.0%"></div>
-          <div class="b2" style="width:43.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Argelia 34%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Austria 43%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇦🇷 Argentina</td><td>6.6</td><td>+4.2</td></tr><tr class='q1'><td>2</td><td>🇦🇹 Austria</td><td>4.4</td><td>+0.5</td></tr><tr class='q3'><td>3</td><td>🇩🇿 Argelia</td><td>3.9</td><td>-0.5</td></tr><tr class=''><td>4</td><td>🇯🇴 Jordania</td><td>2.0</td><td>-4.2</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO J</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='Argentina vs Argelia (17 jun): Gana Argentina con 63% (cuota 1.59); marcador más probable 2–1 (10% exacto). Gana local 63% / empate 20% / gana visitante 17%'><span class='fd'>17 jun</span><span class='fa'>🇦🇷 Argentina</span><span class='fs'>2–1</span><span class='fb'>Argelia 🇩🇿</span><span class='fr'>Gana Argentina <b>63%</b></span></div><div class='fx' title='Austria vs Jordania (17 jun): Gana Austria con 63% (cuota 1.59); marcador más probable 2–1 (9% exacto). Gana local 63% / empate 19% / gana visitante 19%'><span class='fd'>17 jun</span><span class='fa'>🇦🇹 Austria</span><span class='fs'>2–1</span><span class='fb'>Jordania 🇯🇴</span><span class='fr'>Gana Austria <b>63%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='Argentina vs Austria (22 jun): Gana Argentina con 58% (cuota 1.71); marcador más probable 2–1 (10% exacto). Gana local 58% / empate 21% / gana visitante 21%'><span class='fd'>22 jun</span><span class='fa'>🇦🇷 Argentina</span><span class='fs'>2–1</span><span class='fb'>Austria 🇦🇹</span><span class='fr'>Gana Argentina <b>58%</b></span></div><div class='fx' title='Jordania vs Argelia (23 jun): Gana Argelia con 58% (cuota 1.74); marcador más probable 1–2 (10% exacto). Gana local 22% / empate 20% / gana visitante 58%'><span class='fd'>23 jun</span><span class='fa'>🇯🇴 Jordania</span><span class='fs'>1–2</span><span class='fb'>Argelia 🇩🇿</span><span class='fr'>Gana Argelia <b>58%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Jordania vs Argentina (28 jun): Gana Argentina con 80% (cuota 1.26); marcador más probable 0–3 (10% exacto). Gana local 8% / empate 13% / gana visitante 80%'><span class='fd'>28 jun</span><span class='fa'>🇯🇴 Jordania</span><span class='fs'>0–3</span><span class='fb'>Argentina 🇦🇷</span><span class='fr'>Gana Argentina <b>80%</b></span></div><div class='fx' title='Argelia vs Austria (28 jun): Gana Austria con 43% (cuota 2.31); marcador más probable 1–1 (10% exacto). Gana local 34% / empate 23% / gana visitante 43%'><span class='fd'>28 jun</span><span class='fa'>🇩🇿 Argelia</span><span class='fs'>1–1</span><span class='fb'>Austria 🇦🇹</span><span class='fr'>Gana Austria <b>43%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇦🇷 Argentina</td><td>6.6</td><td>+4.2</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇦🇹 Austria</td><td>4.4</td><td>+0.5</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q3'><td>3°</td><td>🇩🇿 Argelia</td><td>3.9</td><td>-0.5</td><td><span class='tag'>Mejor 3°</span></td></tr><tr class='q0'><td>4°</td><td>🇯🇴 Jordania</td><td>2.0</td><td>-4.2</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo K</h2>
-      <div class="match">
-        <div class="mdate">J1 · 17 jun</div>
-        <div class="teams">
-          <span class="team fav">🇵🇹 Portugal</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">RD Congo 🇨🇩</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:68.3%"></div>
-          <div class="bx" style="width:17.3%"></div>
-          <div class="b2" style="width:14.4%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Portugal 68%</span>
-          <span class="gx">Empate 17%</span>
-          <span class="g2">Gana RD Congo 14%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 18 jun</div>
-        <div class="teams">
-          <span class="team ">🇺🇿 Uzbekistán</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Colombia 🇨🇴</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:21.3%"></div>
-          <div class="bx" style="width:20.6%"></div>
-          <div class="b2" style="width:58.0%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Uzbekistán 21%</span>
-          <span class="gx">Empate 21%</span>
-          <span class="g2">Gana Colombia 58%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 23 jun</div>
-        <div class="teams">
-          <span class="team fav">🇵🇹 Portugal</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Uzbekistán 🇺🇿</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:61.6%"></div>
-          <div class="bx" style="width:19.4%"></div>
-          <div class="b2" style="width:19.0%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Portugal 62%</span>
-          <span class="gx">Empate 19%</span>
-          <span class="g2">Gana Uzbekistán 19%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 24 jun</div>
-        <div class="teams">
-          <span class="team fav">🇨🇴 Colombia</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">RD Congo 🇨🇩</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:64.9%"></div>
-          <div class="bx" style="width:18.7%"></div>
-          <div class="b2" style="width:16.5%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Colombia 65%</span>
-          <span class="gx">Empate 19%</span>
-          <span class="g2">Gana RD Congo 16%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 28 jun</div>
-        <div class="teams">
-          <span class="team ">🇨🇴 Colombia</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Portugal 🇵🇹</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:35.4%"></div>
-          <div class="bx" style="width:22.8%"></div>
-          <div class="b2" style="width:41.7%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Colombia 35%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Portugal 42%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 28 jun</div>
-        <div class="teams">
-          <span class="team ">🇨🇩 RD Congo</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Uzbekistán 🇺🇿</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:31.6%"></div>
-          <div class="bx" style="width:23.2%"></div>
-          <div class="b2" style="width:45.3%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana RD Congo 32%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Uzbekistán 45%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇵🇹 Portugal</td><td>5.7</td><td>+2.7</td></tr><tr class='q1'><td>2</td><td>🇨🇴 Colombia</td><td>5.4</td><td>+2.0</td></tr><tr class='q3'><td>3</td><td>🇺🇿 Uzbekistán</td><td>3.2</td><td>-1.7</td></tr><tr class=''><td>4</td><td>🇨🇩 RD Congo</td><td>2.5</td><td>-3.0</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO K</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='Portugal vs RD Congo (17 jun): Gana Portugal con 68% (cuota 1.46); marcador más probable 2–1 (10% exacto). Gana local 68% / empate 17% / gana visitante 14%'><span class='fd'>17 jun</span><span class='fa'>🇵🇹 Portugal</span><span class='fs'>2–1</span><span class='fb'>RD Congo 🇨🇩</span><span class='fr'>Gana Portugal <b>68%</b></span></div><div class='fx' title='Uzbekistán vs Colombia (18 jun): Gana Colombia con 58% (cuota 1.72); marcador más probable 1–2 (10% exacto). Gana local 21% / empate 21% / gana visitante 58%'><span class='fd'>18 jun</span><span class='fa'>🇺🇿 Uzbekistán</span><span class='fs'>1–2</span><span class='fb'>Colombia 🇨🇴</span><span class='fr'>Gana Colombia <b>58%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='Portugal vs Uzbekistán (23 jun): Gana Portugal con 62% (cuota 1.62); marcador más probable 2–1 (10% exacto). Gana local 62% / empate 19% / gana visitante 19%'><span class='fd'>23 jun</span><span class='fa'>🇵🇹 Portugal</span><span class='fs'>2–1</span><span class='fb'>Uzbekistán 🇺🇿</span><span class='fr'>Gana Portugal <b>62%</b></span></div><div class='fx' title='Colombia vs RD Congo (24 jun): Gana Colombia con 65% (cuota 1.54); marcador más probable 2–1 (10% exacto). Gana local 65% / empate 19% / gana visitante 16%'><span class='fd'>24 jun</span><span class='fa'>🇨🇴 Colombia</span><span class='fs'>2–1</span><span class='fb'>RD Congo 🇨🇩</span><span class='fr'>Gana Colombia <b>65%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Colombia vs Portugal (28 jun): Gana Portugal con 42% (cuota 2.40); marcador más probable 1–1 (10% exacto). Gana local 35% / empate 23% / gana visitante 42%'><span class='fd'>28 jun</span><span class='fa'>🇨🇴 Colombia</span><span class='fs'>1–1</span><span class='fb'>Portugal 🇵🇹</span><span class='fr'>Gana Portugal <b>42%</b></span></div><div class='fx' title='RD Congo vs Uzbekistán (28 jun): Gana Uzbekistán con 45% (cuota 2.21); marcador más probable 1–1 (10% exacto). Gana local 32% / empate 23% / gana visitante 45%'><span class='fd'>28 jun</span><span class='fa'>🇨🇩 RD Congo</span><span class='fs'>1–1</span><span class='fb'>Uzbekistán 🇺🇿</span><span class='fr'>Gana Uzbekistán <b>45%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🇵🇹 Portugal</td><td>5.7</td><td>+2.7</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇨🇴 Colombia</td><td>5.4</td><td>+2.0</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q3'><td>3°</td><td>🇺🇿 Uzbekistán</td><td>3.2</td><td>-1.7</td><td><span class='tag'>Mejor 3°</span></td></tr><tr class='q0'><td>4°</td><td>🇨🇩 RD Congo</td><td>2.5</td><td>-3.0</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
     </div>
-    <div class="group">
-      <h2>Grupo L</h2>
-      <div class="match">
-        <div class="mdate">J1 · 17 jun</div>
-        <div class="teams">
-          <span class="team fav">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Croacia 🇭🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:49.6%"></div>
-          <div class="bx" style="width:23.0%"></div>
-          <div class="b2" style="width:27.4%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Inglaterra 50%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Croacia 27%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J1 · 18 jun</div>
-        <div class="teams">
-          <span class="team ">🇬🇭 Ghana</span>
-          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Panamá 🇵🇦</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:31.0%"></div>
-          <div class="bx" style="width:22.8%"></div>
-          <div class="b2" style="width:46.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Ghana 31%</span>
-          <span class="gx">Empate 23%</span>
-          <span class="g2">Gana Panamá 46%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 23 jun</div>
-        <div class="teams">
-          <span class="team fav">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span>
-          <span class="scorebox"><span class="score">2 – 0</span><span class="exact">prob. marcador 11%</span></span>
-          <span class="team away ">Ghana 🇬🇭</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:76.5%"></div>
-          <div class="bx" style="width:14.3%"></div>
-          <div class="b2" style="width:9.2%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Inglaterra 77%</span>
-          <span class="gx">Empate 14%</span>
-          <span class="g2">Gana Ghana 9%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J2 · 24 jun</div>
-        <div class="teams">
-          <span class="team ">🇵🇦 Panamá</span>
-          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Croacia 🇭🇷</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:20.0%"></div>
-          <div class="bx" style="width:20.0%"></div>
-          <div class="b2" style="width:60.0%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Panamá 20%</span>
-          <span class="gx">Empate 20%</span>
-          <span class="g2">Gana Croacia 60%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 27 jun</div>
-        <div class="teams">
-          <span class="team fav">🇭🇷 Croacia</span>
-          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away ">Ghana 🇬🇭</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:67.5%"></div>
-          <div class="bx" style="width:17.6%"></div>
-          <div class="b2" style="width:14.9%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Croacia 67%</span>
-          <span class="gx">Empate 18%</span>
-          <span class="g2">Gana Ghana 15%</span>
-        </div>
-      </div>
-      <div class="match">
-        <div class="mdate">J3 · 27 jun</div>
-        <div class="teams">
-          <span class="team ">🇵🇦 Panamá</span>
-          <span class="scorebox"><span class="score">0 – 2</span><span class="exact">prob. marcador 10%</span></span>
-          <span class="team away fav">Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
-        </div>
-        <div class="bar">
-          <div class="b1" style="width:12.8%"></div>
-          <div class="bx" style="width:17.1%"></div>
-          <div class="b2" style="width:70.1%"></div>
-        </div>
-        <div class="probs">
-          <span class="g1">Gana Panamá 13%</span>
-          <span class="gx">Empate 17%</span>
-          <span class="g2">Gana Inglaterra 70%</span>
-        </div>
-      </div>
-      <table class="standings">
-        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>6.4</td><td>+3.9</td></tr><tr class='q1'><td>2</td><td>🇭🇷 Croacia</td><td>5.3</td><td>+1.9</td></tr><tr class=''><td>3</td><td>🇵🇦 Panamá</td><td>3.0</td><td>-2.2</td></tr><tr class=''><td>4</td><td>🇬🇭 Ghana</td><td>2.2</td><td>-3.7</td></tr>
+    <div class='g'>
+      <div class='ghead'>GRUPO L</div>
+      <div class='jor'>Jornada 1</div><div class='fx' title='Inglaterra vs Croacia (17 jun): Gana Inglaterra con 50% (cuota 2.01); marcador más probable 1–1 (10% exacto). Gana local 50% / empate 23% / gana visitante 27%'><span class='fd'>17 jun</span><span class='fa'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='fs'>1–1</span><span class='fb'>Croacia 🇭🇷</span><span class='fr'>Gana Inglaterra <b>50%</b></span></div><div class='fx' title='Ghana vs Panamá (18 jun): Gana Panamá con 46% (cuota 2.16); marcador más probable 1–1 (10% exacto). Gana local 31% / empate 23% / gana visitante 46%'><span class='fd'>18 jun</span><span class='fa'>🇬🇭 Ghana</span><span class='fs'>1–1</span><span class='fb'>Panamá 🇵🇦</span><span class='fr'>Gana Panamá <b>46%</b></span></div><div class='jor'>Jornada 2</div><div class='fx' title='Inglaterra vs Ghana (23 jun): Gana Inglaterra con 77% (cuota 1.31); marcador más probable 2–0 (11% exacto). Gana local 77% / empate 14% / gana visitante 9%'><span class='fd'>23 jun</span><span class='fa'>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span><span class='fs'>2–0</span><span class='fb'>Ghana 🇬🇭</span><span class='fr'>Gana Inglaterra <b>77%</b></span></div><div class='fx' title='Panamá vs Croacia (24 jun): Gana Croacia con 60% (cuota 1.67); marcador más probable 1–2 (10% exacto). Gana local 20% / empate 20% / gana visitante 60%'><span class='fd'>24 jun</span><span class='fa'>🇵🇦 Panamá</span><span class='fs'>1–2</span><span class='fb'>Croacia 🇭🇷</span><span class='fr'>Gana Croacia <b>60%</b></span></div><div class='jor'>Jornada 3</div><div class='fx' title='Croacia vs Ghana (27 jun): Gana Croacia con 67% (cuota 1.48); marcador más probable 2–1 (10% exacto). Gana local 67% / empate 18% / gana visitante 15%'><span class='fd'>27 jun</span><span class='fa'>🇭🇷 Croacia</span><span class='fs'>2–1</span><span class='fb'>Ghana 🇬🇭</span><span class='fr'>Gana Croacia <b>67%</b></span></div><div class='fx' title='Panamá vs Inglaterra (27 jun): Gana Inglaterra con 70% (cuota 1.43); marcador más probable 0–2 (10% exacto). Gana local 13% / empate 17% / gana visitante 70%'><span class='fd'>27 jun</span><span class='fa'>🇵🇦 Panamá</span><span class='fs'>0–2</span><span class='fb'>Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class='fr'>Gana Inglaterra <b>70%</b></span></div>
+      <table>
+        <tr><th>Pos</th><th>Equipo</th><th>Pts esp.</th><th>Dif.</th><th></th></tr><tr class='q1'><td>1°</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>6.4</td><td>+3.9</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q1'><td>2°</td><td>🇭🇷 Croacia</td><td>5.3</td><td>+1.9</td><td><span class='tag'>Clasifica</span></td></tr><tr class='q0'><td>3°</td><td>🇵🇦 Panamá</td><td>3.0</td><td>-2.2</td><td><span class='tag'>Eliminado</span></td></tr><tr class='q0'><td>4°</td><td>🇬🇭 Ghana</td><td>2.2</td><td>-3.7</td><td><span class='tag'>Eliminado</span></td></tr>
       </table>
-    </div>
-</div>
-<h2 style="margin-top:34px">Fuerzas de los equipos (modelo)</h2>
-<table>
-<tr><th>#</th><th>Equipo</th><th>Ataque</th><th>Defensa</th><th>Pts FIFA</th><th>GF/p</th><th>GC/p</th><th>PJ</th></tr>
-<tr><td>1</td><td>🇪🇸 España</td><td>1.49</td><td>0.64</td><td>1874</td><td>2.74</td><td>0.96</td><td>27</td></tr><tr><td>2</td><td>🇦🇷 Argentina</td><td>1.37</td><td>0.59</td><td>1876</td><td>2.00</td><td>0.30</td><td>10</td></tr><tr><td>3</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>1.31</td><td>0.60</td><td>1827</td><td>2.04</td><td>0.52</td><td>25</td></tr><tr><td>4</td><td>🇫🇷 Francia</td><td>1.33</td><td>0.63</td><td>1871</td><td>1.77</td><td>0.92</td><td>26</td></tr><tr><td>5</td><td>🇳🇱 P. Bajos</td><td>1.31</td><td>0.72</td><td>1754</td><td>2.62</td><td>0.96</td><td>26</td></tr><tr><td>6</td><td>🇵🇹 Portugal</td><td>1.28</td><td>0.73</td><td>1766</td><td>2.31</td><td>1.12</td><td>26</td></tr><tr><td>7</td><td>🇩🇪 Alemania</td><td>1.24</td><td>0.72</td><td>1736</td><td>2.28</td><td>0.84</td><td>25</td></tr><tr><td>8</td><td>🇧🇪 Bélgica</td><td>1.20</td><td>0.73</td><td>1742</td><td>2.00</td><td>0.96</td><td>24</td></tr><tr><td>9</td><td>🇲🇦 Marruecos</td><td>1.17</td><td>0.72</td><td>1755</td><td>1.70</td><td>0.70</td><td>10</td></tr><tr><td>10</td><td>🇯🇵 Japón</td><td>1.28</td><td>0.83</td><td>1662</td><td>3.27</td><td>1.13</td><td>15</td></tr><tr><td>11</td><td>🇨🇴 Colombia</td><td>1.19</td><td>0.75</td><td>1698</td><td>2.40</td><td>0.60</td><td>10</td></tr><tr><td>12</td><td>🇧🇷 Brasil</td><td>1.18</td><td>0.75</td><td>1766</td><td>1.62</td><td>1.00</td><td>8</td></tr><tr><td>13</td><td>🇭🇷 Croacia</td><td>1.18</td><td>0.76</td><td>1715</td><td>2.09</td><td>1.00</td><td>23</td></tr><tr><td>14</td><td>🇮🇷 Irán</td><td>1.16</td><td>0.81</td><td>1620</td><td>2.71</td><td>0.76</td><td>17</td></tr><tr><td>15</td><td>🇸🇳 Senegal</td><td>1.04</td><td>0.73</td><td>1685</td><td>1.27</td><td>0.36</td><td>11</td></tr><tr><td>16</td><td>🇺🇾 Uruguay</td><td>1.07</td><td>0.78</td><td>1673</td><td>1.64</td><td>0.73</td><td>11</td></tr><tr><td>17</td><td>🇳🇴 Noruega</td><td>1.18</td><td>0.90</td><td>1557</td><td>3.22</td><td>1.00</td><td>18</td></tr><tr><td>18</td><td>🇲🇽 México</td><td>1.04</td><td>0.78</td><td>1687</td><td>1.31</td><td>0.85</td><td>13</td></tr><tr><td>19</td><td>🇦🇹 Austria</td><td>1.09</td><td>0.84</td><td>1597</td><td>2.29</td><td>0.88</td><td>24</td></tr><tr><td>20</td><td>🇨🇭 Suiza</td><td>1.04</td><td>0.81</td><td>1650</td><td>1.62</td><td>1.00</td><td>21</td></tr><tr><td>21</td><td>🇺🇸 EE.UU.</td><td>0.99</td><td>0.87</td><td>1671</td><td>1.07</td><td>1.43</td><td>14</td></tr><tr><td>22</td><td>🇰🇷 Corea del Sur</td><td>1.01</td><td>0.88</td><td>1592</td><td>1.80</td><td>1.07</td><td>15</td></tr><tr><td>23</td><td>🇩🇿 Argelia</td><td>1.00</td><td>0.89</td><td>1571</td><td>1.90</td><td>0.80</td><td>10</td></tr><tr><td>24</td><td>🇪🇬 Egipto</td><td>0.97</td><td>0.86</td><td>1562</td><td>1.72</td><td>0.83</td><td>29</td></tr><tr><td>25</td><td>🇨🇮 C. de Marfil</td><td>0.96</td><td>0.86</td><td>1541</td><td>1.83</td><td>0.70</td><td>30</td></tr><tr><td>26</td><td>🇦🇺 Australia</td><td>0.97</td><td>0.87</td><td>1579</td><td>1.62</td><td>0.85</td><td>13</td></tr><tr><td>27</td><td>🇹🇷 Turquía</td><td>1.01</td><td>0.92</td><td>1606</td><td>1.76</td><td>1.44</td><td>25</td></tr><tr><td>28</td><td>🇪🇨 Ecuador</td><td>0.96</td><td>0.89</td><td>1599</td><td>1.33</td><td>1.00</td><td>9</td></tr><tr><td>29</td><td>🇨🇿 R. Checa</td><td>0.96</td><td>0.98</td><td>1506</td><td>2.00</td><td>1.22</td><td>23</td></tr><tr><td>30</td><td>🇹🇳 Túnez</td><td>0.85</td><td>0.88</td><td>1476</td><td>1.48</td><td>0.41</td><td>27</td></tr><tr><td>31</td><td>🇨🇦 Canadá</td><td>0.86</td><td>0.92</td><td>1559</td><td>0.93</td><td>1.07</td><td>15</td></tr><tr><td>32</td><td>🇺🇿 Uzbekistán</td><td>0.89</td><td>0.98</td><td>1459</td><td>1.82</td><td>0.82</td><td>17</td></tr><tr><td>33</td><td>🇸🇪 Suecia</td><td>0.94</td><td>1.03</td><td>1510</td><td>1.84</td><td>1.58</td><td>19</td></tr><tr><td>34</td><td>🇵🇦 Panamá</td><td>0.87</td><td>1.03</td><td>1539</td><td>1.09</td><td>1.73</td><td>11</td></tr><tr><td>35</td><td>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</td><td>0.85</td><td>1.03</td><td>1503</td><td>1.29</td><td>1.52</td><td>21</td></tr><tr><td>36</td><td>🇮🇶 Irak</td><td>0.85</td><td>1.06</td><td>1451</td><td>1.58</td><td>1.32</td><td>19</td></tr><tr><td>37</td><td>🇸🇦 A. Saudita</td><td>0.87</td><td>1.09</td><td>1423</td><td>1.88</td><td>1.12</td><td>8</td></tr><tr><td>38</td><td>🇵🇾 Paraguay</td><td>0.84</td><td>1.07</td><td>1505</td><td>1.00</td><td>1.75</td><td>8</td></tr><tr><td>39</td><td>🇿🇦 Sudáfrica</td><td>0.80</td><td>1.03</td><td>1433</td><td>1.29</td><td>0.93</td><td>14</td></tr><tr><td>40</td><td>🇶🇦 Catar</td><td>0.81</td><td>1.04</td><td>1450</td><td>1.32</td><td>1.24</td><td>25</td></tr><tr><td>41</td><td>🇨🇩 RD Congo</td><td>0.80</td><td>1.08</td><td>1420</td><td>1.25</td><td>1.00</td><td>8</td></tr><tr><td>42</td><td>🇨🇻 Cabo Verde</td><td>0.75</td><td>1.10</td><td>1371</td><td>1.33</td><td>0.96</td><td>27</td></tr><tr><td>43</td><td>🇭🇹 Haití</td><td>0.91</td><td>1.26</td><td>1293</td><td>2.79</td><td>1.29</td><td>14</td></tr><tr><td>44</td><td>🇬🇭 Ghana</td><td>0.78</td><td>1.14</td><td>1347</td><td>1.59</td><td>1.07</td><td>27</td></tr><tr><td>45</td><td>🇨🇼 Curazao</td><td>0.83</td><td>1.20</td><td>1295</td><td>2.25</td><td>0.62</td><td>8</td></tr><tr><td>46</td><td>🇯🇴 Jordania</td><td>0.81</td><td>1.21</td><td>1388</td><td>1.63</td><td>1.84</td><td>19</td></tr><tr><td>47</td><td>🇳🇿 N. Zelanda</td><td>0.81</td><td>1.22</td><td>1276</td><td>2.22</td><td>0.56</td><td>9</td></tr><tr><td>48</td><td>🇧🇦 Bosnia</td><td>0.76</td><td>1.19</td><td>1387</td><td>1.28</td><td>1.67</td><td>18</td></tr>
-</table>
-<p class="note"><b>Nota metodológica:</b> modelo de Poisson independiente por equipo. λ_A = ataque_A × defensa_B × μ
-(cancha neutral; +10% para los anfitriones México, EE.UU. y Canadá). Las fuerzas combinan <b>65% ranking FIFA</b>
-(10-jun-2026, escala tipo Elo) y <b>35% promedio de goles 2023–2024</b> (API-Football, plan gratuito), con suavizado
-para muestras pequeñas — la parte de ranking corrige que los goles no ponderan la fuerza del rival. El "marcador" es la
-celda más probable de la matriz 0–6 goles; aun siendo el más probable, rara vez supera el 15%: úsalo como guía, no como certeza.</p>
+    </div></div>
+<p class="note"><b>Cómo leer:</b> en la eliminatoria, cada llave muestra el partido oficial (número, fecha y sede),
+qué clasificado llega (ej. "1°A vs 3°(CEFHI)" = ganador del grupo A contra un tercero de C/E/F/H/I) y el pronóstico en
+verde: <b>quién gana, marcador y probabilidad con su cuota</b>. Haz clic en la llave para ver la explicación.
+Los equipos mostrados son los que el modelo proyecta que llegan a cada llave — lo único fijo hoy son las llaves.
+En los grupos, cada partido muestra fecha, marcador más probable y resultado; deja el mouse encima para el detalle 1X2.
+<b>Modelo:</b> Poisson con fuerzas 65% ranking FIFA (10-jun-2026) + 35% goles 2023–24 (API-Football);
++10% de gol esperado para los anfitriones México, EE.UU. y Canadá; empates de eliminatoria repartidos 50/50 (penales).
+Cuota = 1/probabilidad (referencia, no incluye margen de casa).</p>
+</main>
+<script>
+document.querySelectorAll('.m').forEach(function(m) {
+  m.addEventListener('click', function() { m.classList.toggle('open'); });
+});
+</script>
 </body>
 </html>

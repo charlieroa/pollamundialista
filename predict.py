@@ -3,7 +3,7 @@
 
 Calibra ataque/defensa de cada seleccion con sus partidos de 2024
 (ultima temporada accesible en el plan Free de API-Football) y genera
-index.html con la cuadricula de los 72 partidos de fase de grupos.
+grupos.html con la cuadricula de los 72 partidos de fase de grupos.
 """
 import json
 import math
@@ -13,7 +13,7 @@ from pathlib import Path
 from fetch_data import GROUPS
 
 DATA = Path(__file__).parent / "data"
-OUT = Path(__file__).parent / "index.html"
+OUT = Path(__file__).parent / "grupos.html"
 
 MAX_GOALS = 6          # matriz de marcadores 0..6
 SHRINK_K = 6           # suavizado: peso n/(n+K) hacia la media global
@@ -313,7 +313,7 @@ def render(st, mu):
 <h1>⚽ Polla Mundial 2026 — Pronósticos Poisson</h1>
 <p class="sub">Marcador más probable por partido (fase de grupos) · barras = prob. gana local / empate / gana visitante ·
 calibrado con partidos internacionales de 2023–2024 (API-Football) · μ global = {mu:.2f} goles/partido ·
-<a href="bracket.html" style="color:#58a6ff">ver plantilla de eliminatoria completa →</a></p>
+<a href="index.html" style="color:#58a6ff">ver plantilla de eliminatoria completa →</a></p>
 <div class="grid">{''.join(rows)}
 </div>
 <h2 style="margin-top:34px">Fuerzas de los equipos (modelo)</h2>

@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/bracket.html", "destination": "/", "permanent": false }
+  ]
+}

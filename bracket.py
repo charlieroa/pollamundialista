@@ -4,7 +4,7 @@
 Proyecta las tablas de grupos con puntos esperados (Poisson + ranking FIFA),
 clasifica 1ro y 2do de cada grupo + los 8 mejores terceros, llena el cuadro
 oficial de dieciseisavos y avanza al ganador mas probable hasta la final.
-Genera bracket.html.
+Genera index.html (vista principal del sitio).
 """
 import datetime
 import sys
@@ -14,7 +14,7 @@ from predict import (FLAGS, MAX_GOALS, NAMES_ES, SCHEDULE, best_thirds,
                      expected_standings, load_team_stats, poisson, predict,
                      strengths)
 
-OUT = Path(__file__).parent / "bracket.html"
+OUT = Path(__file__).parent / "index.html"
 
 # Cuadro oficial (Wikipedia/FIFA, partidos 73-104). 1X=ganador grupo,
 # 2X=segundo, T<n>=mejor tercero asignado al partido n.
@@ -441,8 +441,8 @@ def main():
   <h1>🏆 Mundial 2026 <span>· Plantilla de Pronósticos</span></h1>
   <div class="sub">Modelo Poisson + ranking FIFA · 48 selecciones · 11 jun – 19 jul 2026 ·
   haz clic en cualquier llave para ver por qué gana</div>
-  <div class="nav"><a class="on" href="bracket.html">Eliminatoria y grupos</a>
-  <a href="index.html">Cuadrícula completa de grupos</a></div>
+  <div class="nav"><a class="on" href="index.html">Eliminatoria y grupos</a>
+  <a href="grupos.html">Cuadrícula completa de grupos</a></div>
 </header>
 <main>
 {today_html}

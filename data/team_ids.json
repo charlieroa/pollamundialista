@@ -1,0 +1,434 @@
+{
+ "Mexico": {
+  "id": 16,
+  "name": "Mexico",
+  "code": "MEX",
+  "country": "Mexico",
+  "founded": 1927,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/16.png"
+ },
+ "South Korea": {
+  "id": 17,
+  "name": "South Korea",
+  "code": "KOR",
+  "country": "South-Korea",
+  "founded": 1933,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/17.png"
+ },
+ "Canada": {
+  "id": 5529,
+  "name": "Canada",
+  "code": "CAN",
+  "country": "Canada",
+  "founded": 1912,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/5529.png"
+ },
+ "Qatar": {
+  "id": 1569,
+  "name": "Qatar",
+  "code": "QAT",
+  "country": "Qatar",
+  "founded": 1960,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1569.png"
+ },
+ "Switzerland": {
+  "id": 15,
+  "name": "Switzerland",
+  "code": "SUI",
+  "country": "Switzerland",
+  "founded": 1895,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/15.png"
+ },
+ "Brazil": {
+  "id": 6,
+  "name": "Brazil",
+  "code": "BRA",
+  "country": "Brazil",
+  "founded": 1914,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/6.png"
+ },
+ "Morocco": {
+  "id": 31,
+  "name": "Morocco",
+  "code": "MAR",
+  "country": "Morocco",
+  "founded": 1955,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/31.png"
+ },
+ "USA": {
+  "id": 2384,
+  "name": "USA",
+  "code": "USA",
+  "country": "USA",
+  "founded": 1913,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/2384.png"
+ },
+ "Australia": {
+  "id": 20,
+  "name": "Australia",
+  "code": "AUS",
+  "country": "Australia",
+  "founded": 1961,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/20.png"
+ },
+ "Germany": {
+  "id": 25,
+  "name": "Germany",
+  "code": "GER",
+  "country": "Germany",
+  "founded": 1900,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/25.png"
+ },
+ "Ecuador": {
+  "id": 2382,
+  "name": "Ecuador",
+  "code": "ECU",
+  "country": "Ecuador",
+  "founded": 1925,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/2382.png"
+ },
+ "Netherlands": {
+  "id": 1118,
+  "name": "Netherlands",
+  "code": "NED",
+  "country": "Netherlands",
+  "founded": 1889,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1118.png"
+ },
+ "Japan": {
+  "id": 12,
+  "name": "Japan",
+  "code": "JPN",
+  "country": "Japan",
+  "founded": 1921,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/12.png"
+ },
+ "Tunisia": {
+  "id": 28,
+  "name": "Tunisia",
+  "code": "TUN",
+  "country": "Tunisia",
+  "founded": 1957,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/28.png"
+ },
+ "Belgium": {
+  "id": 1,
+  "name": "Belgium",
+  "code": "BEL",
+  "country": "Belgium",
+  "founded": 1895,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1.png"
+ },
+ "Iran": {
+  "id": 22,
+  "name": "Iran",
+  "code": "IRN",
+  "country": "Iran",
+  "founded": 1920,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/22.png"
+ },
+ "Spain": {
+  "id": 9,
+  "name": "Spain",
+  "code": "ESP",
+  "country": "Spain",
+  "founded": 1913,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/9.png"
+ },
+ "Saudi Arabia": {
+  "id": 23,
+  "name": "Saudi Arabia",
+  "code": "KSA",
+  "country": "Saudi-Arabia",
+  "founded": 1956,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/23.png"
+ },
+ "Uruguay": {
+  "id": 7,
+  "name": "Uruguay",
+  "code": "URU",
+  "country": "Uruguay",
+  "founded": 1900,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/7.png"
+ },
+ "France": {
+  "id": 2,
+  "name": "France",
+  "code": "FRA",
+  "country": "France",
+  "founded": 1919,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/2.png"
+ },
+ "Senegal": {
+  "id": 13,
+  "name": "Senegal",
+  "code": "SEN",
+  "country": "Senegal",
+  "founded": 1960,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/13.png"
+ },
+ "Argentina": {
+  "id": 26,
+  "name": "Argentina",
+  "code": "ARG",
+  "country": "Argentina",
+  "founded": 1893,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/26.png"
+ },
+ "Portugal": {
+  "id": 27,
+  "name": "Portugal",
+  "code": "POR",
+  "country": "Portugal",
+  "founded": 1914,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/27.png"
+ },
+ "England": {
+  "id": 10,
+  "name": "England",
+  "code": "ENG",
+  "country": "England",
+  "founded": 1863,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/10.png"
+ },
+ "Croatia": {
+  "id": 3,
+  "name": "Croatia",
+  "code": "CRO",
+  "country": "Croatia",
+  "founded": 1912,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/3.png"
+ },
+ "Ghana": {
+  "id": 1504,
+  "name": "Ghana",
+  "code": "GHA",
+  "country": "Ghana",
+  "founded": 1957,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1504.png"
+ },
+ "South Africa": {
+  "id": 1531,
+  "name": "South Africa",
+  "code": "RSA",
+  "country": "South-Africa",
+  "founded": 1991,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1531.png"
+ },
+ "Czech Republic": {
+  "id": 770,
+  "name": "Czech Republic",
+  "code": "CZE",
+  "country": "Czech-Republic",
+  "founded": 1901,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/770.png"
+ },
+ "Bosnia and Herzegovina": {
+  "id": 1113,
+  "name": "Bosnia & Herzegovina",
+  "code": "BIH",
+  "country": "Bosnia",
+  "founded": 1992,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1113.png"
+ },
+ "Scotland": {
+  "id": 1108,
+  "name": "Scotland",
+  "code": "SCO",
+  "country": "Scotland",
+  "founded": 1873,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1108.png"
+ },
+ "Haiti": {
+  "id": 2386,
+  "name": "Haiti",
+  "code": "HAI",
+  "country": "Haiti",
+  "founded": 1904,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/2386.png"
+ },
+ "Turkey": {
+  "id": 777,
+  "name": "Türkiye",
+  "code": "TUR",
+  "country": "Turkey",
+  "founded": 1923,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/777.png"
+ },
+ "Paraguay": {
+  "id": 2380,
+  "name": "Paraguay",
+  "code": "PAR",
+  "country": "Paraguay",
+  "founded": 1906,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/2380.png"
+ },
+ "Curacao": {
+  "id": 5530,
+  "name": "Curaçao",
+  "code": "CUR",
+  "country": "Curacao",
+  "founded": 1921,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/5530.png"
+ },
+ "Ivory Coast": {
+  "id": 1501,
+  "name": "Ivory Coast",
+  "code": "CIV",
+  "country": "Ivory-Coast",
+  "founded": 1960,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1501.png"
+ },
+ "Sweden": {
+  "id": 5,
+  "name": "Sweden",
+  "code": "SWE",
+  "country": "Sweden",
+  "founded": 1904,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/5.png"
+ },
+ "Egypt": {
+  "id": 32,
+  "name": "Egypt",
+  "code": "EGY",
+  "country": "Egypt",
+  "founded": 1921,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/32.png"
+ },
+ "New Zealand": {
+  "id": 4673,
+  "name": "New Zealand",
+  "code": "NZL",
+  "country": "New-Zealand",
+  "founded": 1891,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/4673.png"
+ },
+ "Cape Verde": {
+  "id": 1533,
+  "name": "Cape Verde Islands",
+  "code": "CPV",
+  "country": "Cape-Verde-Islands",
+  "founded": 1982,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1533.png"
+ },
+ "Iraq": {
+  "id": 1567,
+  "name": "Iraq",
+  "code": "IRQ",
+  "country": "Iraq",
+  "founded": 1948,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1567.png"
+ },
+ "Norway": {
+  "id": 1090,
+  "name": "Norway",
+  "code": "NOR",
+  "country": "Norway",
+  "founded": 1902,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1090.png"
+ },
+ "Austria": {
+  "id": 775,
+  "name": "Austria",
+  "code": "AUT",
+  "country": "Austria",
+  "founded": 1904,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/775.png"
+ },
+ "Algeria": {
+  "id": 1532,
+  "name": "Algeria",
+  "code": "ALG",
+  "country": "Algeria",
+  "founded": 1962,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1532.png"
+ },
+ "Jordan": {
+  "id": 1548,
+  "name": "Jordan",
+  "code": "JOR",
+  "country": "Jordan",
+  "founded": 1949,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1548.png"
+ },
+ "Colombia": {
+  "id": 8,
+  "name": "Colombia",
+  "code": "COL",
+  "country": "Colombia",
+  "founded": 1924,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/8.png"
+ },
+ "Uzbekistan": {
+  "id": 1568,
+  "name": "Uzbekistan",
+  "code": "UZB",
+  "country": "Uzbekistan",
+  "founded": 1946,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1568.png"
+ },
+ "Congo DR": {
+  "id": 1508,
+  "name": "Congo DR",
+  "code": "CGO",
+  "country": "Congo-DR",
+  "founded": 1919,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/1508.png"
+ },
+ "Panama": {
+  "id": 11,
+  "name": "Panama",
+  "code": "PAN",
+  "country": "Panama",
+  "founded": 1937,
+  "national": true,
+  "logo": "https://media.api-sports.io/football/teams/11.png"
+ }
+}

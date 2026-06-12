@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polla Mundial 2026 · Pronósticos Poisson</title>
+<style>
+  :root { --bg:#0d1117; --card:#161b22; --line:#30363d; --txt:#e6edf3; --dim:#8b949e;
+          --c1:#2ea043; --cx:#8b949e; --c2:#d29922; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--txt); font:15px/1.45 'Segoe UI',system-ui,sans-serif; padding:24px; }
+  h1 { font-size:26px; margin-bottom:4px; }
+  .sub { color:var(--dim); margin-bottom:24px; font-size:13px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; }
+  .group { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+  .group h2 { font-size:15px; color:#58a6ff; margin-bottom:10px; letter-spacing:.5px; }
+  .match { padding:8px 0; border-top:1px solid var(--line); }
+  .match:first-of-type { border-top:none; }
+  .mdate { font-size:10.5px; color:var(--dim); text-align:center; margin-bottom:2px; }
+  .standings { width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;
+                border-top:2px solid var(--line); }
+  .standings th { color:var(--dim); text-align:left; font-weight:600; padding:4px 6px 2px; }
+  .standings td { padding:2px 6px; }
+  .standings tr.q1 td { color:#3fb950; font-weight:600; }
+  .standings tr.q3 td { color:#d29922; }
+  .teams { display:flex; align-items:center; gap:8px; }
+  .team { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .team.away { text-align:right; }
+  .team.fav { font-weight:600; }
+  .scorebox { display:flex; flex-direction:column; align-items:center; gap:1px; }
+  .score { font-weight:700; font-size:17px; background:#21262d; border-radius:6px; padding:1px 10px; }
+  .exact { font-size:10px; color:#58a6ff; white-space:nowrap; }
+  .bar { display:flex; height:5px; border-radius:3px; overflow:hidden; margin:6px 0 3px; }
+  .b1 { background:var(--c1); } .bx { background:var(--cx); } .b2 { background:var(--c2); }
+  .probs { display:flex; justify-content:space-between; font-size:11.5px; color:var(--dim); }
+  .probs .g1 { color:var(--c1); } .probs .g2 { color:var(--c2); }
+  table { border-collapse:collapse; margin-top:30px; font-size:13px; }
+  th,td { padding:4px 12px; text-align:left; border-bottom:1px solid var(--line); }
+  th { color:var(--dim); font-weight:600; }
+  .note { color:var(--dim); font-size:12px; margin-top:26px; max-width:760px; }
+</style>
+</head>
+<body>
+<h1>⚽ Polla Mundial 2026 — Pronósticos Poisson</h1>
+<p class="sub">Marcador más probable por partido (fase de grupos) · barras = prob. gana local / empate / gana visitante ·
+calibrado con partidos internacionales de 2023–2024 (API-Football) · μ global = 1.83 goles/partido ·
+<a href="bracket.html" style="color:#58a6ff">ver plantilla de eliminatoria completa →</a></p>
+<div class="grid">
+    <div class="group">
+      <h2>Grupo A</h2>
+      <div class="match">
+        <div class="mdate">J1 · 11 jun</div>
+        <div class="teams">
+          <span class="team fav">🇲🇽 México</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Sudáfrica 🇿🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:60.6%"></div>
+          <div class="bx" style="width:20.2%"></div>
+          <div class="b2" style="width:19.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana México 61%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Sudáfrica 19%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 12 jun</div>
+        <div class="teams">
+          <span class="team fav">🇰🇷 Corea del Sur</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">R. Checa 🇨🇿</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:43.9%"></div>
+          <div class="bx" style="width:22.7%"></div>
+          <div class="b2" style="width:33.4%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Corea del Sur 44%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana R. Checa 33%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 18 jun</div>
+        <div class="teams">
+          <span class="team fav">🇨🇿 R. Checa</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Sudáfrica 🇿🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:46.4%"></div>
+          <div class="bx" style="width:22.9%"></div>
+          <div class="b2" style="width:30.7%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana R. Checa 46%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Sudáfrica 31%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 19 jun</div>
+        <div class="teams">
+          <span class="team fav">🇲🇽 México</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Corea del Sur 🇰🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:47.5%"></div>
+          <div class="bx" style="width:22.6%"></div>
+          <div class="b2" style="width:29.9%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana México 47%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Corea del Sur 30%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 25 jun</div>
+        <div class="teams">
+          <span class="team ">🇿🇦 Sudáfrica</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Corea del Sur 🇰🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:26.1%"></div>
+          <div class="bx" style="width:22.4%"></div>
+          <div class="b2" style="width:51.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Sudáfrica 26%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana Corea del Sur 52%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 25 jun</div>
+        <div class="teams">
+          <span class="team ">🇨🇿 R. Checa</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away fav">México 🇲🇽</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:25.3%"></div>
+          <div class="bx" style="width:21.4%"></div>
+          <div class="b2" style="width:53.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana R. Checa 25%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana México 53%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇲🇽 México</td><td>5.5</td><td>+2.1</td></tr><tr class='q1'><td>2</td><td>🇰🇷 Corea del Sur</td><td>4.4</td><td>+0.4</td></tr><tr class='q3'><td>3</td><td>🇨🇿 R. Checa</td><td>3.8</td><td>-0.6</td></tr><tr class=''><td>4</td><td>🇿🇦 Sudáfrica</td><td>2.9</td><td>-2.0</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo B</h2>
+      <div class="match">
+        <div class="mdate">J1 · 12 jun</div>
+        <div class="teams">
+          <span class="team fav">🇨🇦 Canadá</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Bosnia 🇧🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:55.1%"></div>
+          <div class="bx" style="width:21.4%"></div>
+          <div class="b2" style="width:23.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Canadá 55%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Bosnia 24%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 13 jun</div>
+        <div class="teams">
+          <span class="team ">🇶🇦 Catar</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Suiza 🇨🇭</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:22.9%"></div>
+          <div class="bx" style="width:21.8%"></div>
+          <div class="b2" style="width:55.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Catar 23%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana Suiza 55%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 18 jun</div>
+        <div class="teams">
+          <span class="team fav">🇨🇭 Suiza</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Bosnia 🇧🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:62.4%"></div>
+          <div class="bx" style="width:19.5%"></div>
+          <div class="b2" style="width:18.1%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Suiza 62%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Bosnia 18%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 19 jun</div>
+        <div class="teams">
+          <span class="team fav">🇨🇦 Canadá</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Catar 🇶🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:48.0%"></div>
+          <div class="bx" style="width:23.1%"></div>
+          <div class="b2" style="width:29.0%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Canadá 48%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Catar 29%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 24 jun</div>
+        <div class="teams">
+          <span class="team ">🇧🇦 Bosnia</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Catar 🇶🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:32.0%"></div>
+          <div class="bx" style="width:23.2%"></div>
+          <div class="b2" style="width:44.8%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Bosnia 32%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Catar 45%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 24 jun</div>
+        <div class="teams">
+          <span class="team fav">🇨🇭 Suiza</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
+          <span class="team away ">Canadá 🇨🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:45.4%"></div>
+          <div class="bx" style="width:23.4%"></div>
+          <div class="b2" style="width:31.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Suiza 45%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Canadá 31%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇨🇭 Suiza</td><td>5.5</td><td>+2.2</td></tr><tr class='q1'><td>2</td><td>🇨🇦 Canadá</td><td>4.7</td><td>+0.9</td></tr><tr class='q3'><td>3</td><td>🇶🇦 Catar</td><td>3.6</td><td>-0.9</td></tr><tr class=''><td>4</td><td>🇧🇦 Bosnia</td><td>2.9</td><td>-2.2</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo C</h2>
+      <div class="match">
+        <div class="mdate">J1 · 14 jun</div>
+        <div class="teams">
+          <span class="team ">🇧🇷 Brasil</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
+          <span class="team away fav">Marruecos 🇲🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:36.7%"></div>
+          <div class="bx" style="width:23.6%"></div>
+          <div class="b2" style="width:39.7%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Brasil 37%</span>
+          <span class="gx">Empate 24%</span>
+          <span class="g2">Gana Marruecos 40%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 14 jun</div>
+        <div class="teams">
+          <span class="team ">🇭🇹 Haití</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away fav">Escocia 🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:34.1%"></div>
+          <div class="bx" style="width:21.6%"></div>
+          <div class="b2" style="width:44.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Haití 34%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana Escocia 44%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 20 jun</div>
+        <div class="teams">
+          <span class="team ">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Marruecos 🇲🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:18.3%"></div>
+          <div class="bx" style="width:19.8%"></div>
+          <div class="b2" style="width:61.9%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Escocia 18%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Marruecos 62%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 20 jun</div>
+        <div class="teams">
+          <span class="team fav">🇧🇷 Brasil</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">Haití 🇭🇹</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:67.9%"></div>
+          <div class="bx" style="width:16.6%"></div>
+          <div class="b2" style="width:15.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Brasil 68%</span>
+          <span class="gx">Empate 17%</span>
+          <span class="g2">Gana Haití 16%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 25 jun</div>
+        <div class="teams">
+          <span class="team ">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Brasil 🇧🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:19.3%"></div>
+          <div class="bx" style="width:19.9%"></div>
+          <div class="b2" style="width:60.9%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Escocia 19%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Brasil 61%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 25 jun</div>
+        <div class="teams">
+          <span class="team fav">🇲🇦 Marruecos</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">Haití 🇭🇹</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:68.9%"></div>
+          <div class="bx" style="width:16.4%"></div>
+          <div class="b2" style="width:14.6%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Marruecos 69%</span>
+          <span class="gx">Empate 16%</span>
+          <span class="g2">Gana Haití 15%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇲🇦 Marruecos</td><td>5.7</td><td>+2.7</td></tr><tr class='q1'><td>2</td><td>🇧🇷 Brasil</td><td>5.6</td><td>+2.5</td></tr><tr class=''><td>3</td><td>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</td><td>3.1</td><td>-1.9</td></tr><tr class=''><td>4</td><td>🇭🇹 Haití</td><td>2.5</td><td>-3.3</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo D</h2>
+      <div class="match">
+        <div class="mdate">J1 · 13 jun</div>
+        <div class="teams">
+          <span class="team fav">🇺🇸 EE.UU.</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Paraguay 🇵🇾</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:55.3%"></div>
+          <div class="bx" style="width:20.9%"></div>
+          <div class="b2" style="width:23.7%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana EE.UU. 55%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Paraguay 24%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 14 jun</div>
+        <div class="teams">
+          <span class="team fav">🇦🇺 Australia</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Turquía 🇹🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:38.6%"></div>
+          <div class="bx" style="width:23.3%"></div>
+          <div class="b2" style="width:38.1%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Australia 39%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Turquía 38%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 19 jun</div>
+        <div class="teams">
+          <span class="team fav">🇺🇸 EE.UU.</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Australia 🇦🇺</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:42.7%"></div>
+          <div class="bx" style="width:23.1%"></div>
+          <div class="b2" style="width:34.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana EE.UU. 43%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Australia 34%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 20 jun</div>
+        <div class="teams">
+          <span class="team fav">🇹🇷 Turquía</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">Paraguay 🇵🇾</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:50.6%"></div>
+          <div class="bx" style="width:21.9%"></div>
+          <div class="b2" style="width:27.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Turquía 51%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana Paraguay 28%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 26 jun</div>
+        <div class="teams">
+          <span class="team ">🇹🇷 Turquía</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">EE.UU. 🇺🇸</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:34.2%"></div>
+          <div class="bx" style="width:22.5%"></div>
+          <div class="b2" style="width:43.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Turquía 34%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana EE.UU. 43%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 26 jun</div>
+        <div class="teams">
+          <span class="team ">🇵🇾 Paraguay</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Australia 🇦🇺</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:27.3%"></div>
+          <div class="bx" style="width:22.5%"></div>
+          <div class="b2" style="width:50.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Paraguay 27%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana Australia 50%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇺🇸 EE.UU.</td><td>4.9</td><td>+1.2</td></tr><tr class='q1'><td>2</td><td>🇦🇺 Australia</td><td>4.4</td><td>+0.4</td></tr><tr class='q3'><td>3</td><td>🇹🇷 Turquía</td><td>4.4</td><td>+0.3</td></tr><tr class=''><td>4</td><td>🇵🇾 Paraguay</td><td>3.0</td><td>-1.9</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo E</h2>
+      <div class="match">
+        <div class="mdate">J1 · 14 jun</div>
+        <div class="teams">
+          <span class="team fav">🇩🇪 Alemania</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">Curazao 🇨🇼</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:71.3%"></div>
+          <div class="bx" style="width:15.9%"></div>
+          <div class="b2" style="width:12.8%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Alemania 71%</span>
+          <span class="gx">Empate 16%</span>
+          <span class="g2">Gana Curazao 13%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 15 jun</div>
+        <div class="teams">
+          <span class="team fav">🇨🇮 C. de Marfil</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
+          <span class="team away ">Ecuador 🇪🇨</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:39.2%"></div>
+          <div class="bx" style="width:24.0%"></div>
+          <div class="b2" style="width:36.7%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana C. de Marfil 39%</span>
+          <span class="gx">Empate 24%</span>
+          <span class="g2">Gana Ecuador 37%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 20 jun</div>
+        <div class="teams">
+          <span class="team fav">🇩🇪 Alemania</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">C. de Marfil 🇨🇮</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:53.0%"></div>
+          <div class="bx" style="width:22.2%"></div>
+          <div class="b2" style="width:24.8%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Alemania 53%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana C. de Marfil 25%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 21 jun</div>
+        <div class="teams">
+          <span class="team fav">🇪🇨 Ecuador</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Curazao 🇨🇼</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:55.0%"></div>
+          <div class="bx" style="width:21.0%"></div>
+          <div class="b2" style="width:24.0%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Ecuador 55%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Curazao 24%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 25 jun</div>
+        <div class="teams">
+          <span class="team ">🇪🇨 Ecuador</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Alemania 🇩🇪</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:23.8%"></div>
+          <div class="bx" style="width:21.7%"></div>
+          <div class="b2" style="width:54.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Ecuador 24%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana Alemania 55%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 25 jun</div>
+        <div class="teams">
+          <span class="team ">🇨🇼 Curazao</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">C. de Marfil 🇨🇮</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:23.0%"></div>
+          <div class="bx" style="width:20.9%"></div>
+          <div class="b2" style="width:56.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Curazao 23%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana C. de Marfil 56%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇩🇪 Alemania</td><td>6.0</td><td>+3.1</td></tr><tr class='q1'><td>2</td><td>🇨🇮 C. de Marfil</td><td>4.3</td><td>+0.2</td></tr><tr class='q3'><td>3</td><td>🇪🇨 Ecuador</td><td>4.1</td><td>-0.0</td></tr><tr class=''><td>4</td><td>🇨🇼 Curazao</td><td>2.4</td><td>-3.2</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo F</h2>
+      <div class="match">
+        <div class="mdate">J1 · 14 jun</div>
+        <div class="teams">
+          <span class="team fav">🇳🇱 P. Bajos</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">Japón 🇯🇵</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:45.3%"></div>
+          <div class="bx" style="width:21.6%"></div>
+          <div class="b2" style="width:33.1%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana P. Bajos 45%</span>
+          <span class="gx">Empate 22%</span>
+          <span class="g2">Gana Japón 33%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 15 jun</div>
+        <div class="teams">
+          <span class="team ">🇸🇪 Suecia</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
+          <span class="team away fav">Túnez 🇹🇳</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:36.0%"></div>
+          <div class="bx" style="width:23.7%"></div>
+          <div class="b2" style="width:40.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Suecia 36%</span>
+          <span class="gx">Empate 24%</span>
+          <span class="g2">Gana Túnez 40%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 20 jun</div>
+        <div class="teams">
+          <span class="team fav">🇳🇱 P. Bajos</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">Suecia 🇸🇪</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:64.0%"></div>
+          <div class="bx" style="width:18.3%"></div>
+          <div class="b2" style="width:17.7%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana P. Bajos 64%</span>
+          <span class="gx">Empate 18%</span>
+          <span class="g2">Gana Suecia 18%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 21 jun</div>
+        <div class="teams">
+          <span class="team ">🇹🇳 Túnez</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Japón 🇯🇵</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:23.9%"></div>
+          <div class="bx" style="width:21.3%"></div>
+          <div class="b2" style="width:54.8%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Túnez 24%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Japón 55%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 26 jun</div>
+        <div class="teams">
+          <span class="team fav">🇯🇵 Japón</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">Suecia 🇸🇪</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:58.9%"></div>
+          <div class="bx" style="width:19.2%"></div>
+          <div class="b2" style="width:21.9%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Japón 59%</span>
+          <span class="gx">Empate 19%</span>
+          <span class="g2">Gana Suecia 22%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 26 jun</div>
+        <div class="teams">
+          <span class="team ">🇹🇳 Túnez</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">P. Bajos 🇳🇱</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:19.6%"></div>
+          <div class="bx" style="width:20.6%"></div>
+          <div class="b2" style="width:59.8%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Túnez 20%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana P. Bajos 60%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇳🇱 P. Bajos</td><td>5.7</td><td>+2.5</td></tr><tr class='q1'><td>2</td><td>🇯🇵 Japón</td><td>5.0</td><td>+1.4</td></tr><tr class=''><td>3</td><td>🇹🇳 Túnez</td><td>3.2</td><td>-1.7</td></tr><tr class=''><td>4</td><td>🇸🇪 Suecia</td><td>2.9</td><td>-2.3</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo G</h2>
+      <div class="match">
+        <div class="mdate">J1 · 15 jun</div>
+        <div class="teams">
+          <span class="team fav">🇧🇪 Bélgica</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Egipto 🇪🇬</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:51.2%"></div>
+          <div class="bx" style="width:22.6%"></div>
+          <div class="b2" style="width:26.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Bélgica 51%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Egipto 26%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 16 jun</div>
+        <div class="teams">
+          <span class="team fav">🇮🇷 Irán</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">N. Zelanda 🇳🇿</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:66.5%"></div>
+          <div class="bx" style="width:17.4%"></div>
+          <div class="b2" style="width:16.1%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Irán 67%</span>
+          <span class="gx">Empate 17%</span>
+          <span class="g2">Gana N. Zelanda 16%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 21 jun</div>
+        <div class="teams">
+          <span class="team fav">🇧🇪 Bélgica</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Irán 🇮🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:43.4%"></div>
+          <div class="bx" style="width:22.8%"></div>
+          <div class="b2" style="width:33.8%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Bélgica 43%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Irán 34%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 22 jun</div>
+        <div class="teams">
+          <span class="team ">🇳🇿 N. Zelanda</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Egipto 🇪🇬</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:22.2%"></div>
+          <div class="bx" style="width:20.6%"></div>
+          <div class="b2" style="width:57.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana N. Zelanda 22%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Egipto 57%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 27 jun</div>
+        <div class="teams">
+          <span class="team ">🇳🇿 N. Zelanda</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away fav">Bélgica 🇧🇪</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:13.3%"></div>
+          <div class="bx" style="width:16.2%"></div>
+          <div class="b2" style="width:70.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana N. Zelanda 13%</span>
+          <span class="gx">Empate 16%</span>
+          <span class="g2">Gana Bélgica 70%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 27 jun</div>
+        <div class="teams">
+          <span class="team ">🇪🇬 Egipto</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Irán 🇮🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:30.5%"></div>
+          <div class="bx" style="width:22.8%"></div>
+          <div class="b2" style="width:46.7%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Egipto 31%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Irán 47%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇧🇪 Bélgica</td><td>5.6</td><td>+2.4</td></tr><tr class='q1'><td>2</td><td>🇮🇷 Irán</td><td>5.0</td><td>+1.5</td></tr><tr class='q3'><td>3</td><td>🇪🇬 Egipto</td><td>4.1</td><td>-0.1</td></tr><tr class=''><td>4</td><td>🇳🇿 N. Zelanda</td><td>2.1</td><td>-3.8</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo H</h2>
+      <div class="match">
+        <div class="mdate">J1 · 15 jun</div>
+        <div class="teams">
+          <span class="team fav">🇪🇸 España</span>
+          <span class="scorebox"><span class="score">2 – 0</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Cabo Verde 🇨🇻</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:79.0%"></div>
+          <div class="bx" style="width:12.9%"></div>
+          <div class="b2" style="width:8.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana España 79%</span>
+          <span class="gx">Empate 13%</span>
+          <span class="g2">Gana Cabo Verde 8%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 16 jun</div>
+        <div class="teams">
+          <span class="team ">🇸🇦 A. Saudita</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Uruguay 🇺🇾</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:21.8%"></div>
+          <div class="bx" style="width:20.7%"></div>
+          <div class="b2" style="width:57.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana A. Saudita 22%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Uruguay 57%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 21 jun</div>
+        <div class="teams">
+          <span class="team fav">🇪🇸 España</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">A. Saudita 🇸🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:76.1%"></div>
+          <div class="bx" style="width:13.8%"></div>
+          <div class="b2" style="width:10.1%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana España 76%</span>
+          <span class="gx">Empate 14%</span>
+          <span class="g2">Gana A. Saudita 10%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 22 jun</div>
+        <div class="teams">
+          <span class="team fav">🇺🇾 Uruguay</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Cabo Verde 🇨🇻</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:61.6%"></div>
+          <div class="bx" style="width:20.2%"></div>
+          <div class="b2" style="width:18.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Uruguay 62%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Cabo Verde 18%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 27 jun</div>
+        <div class="teams">
+          <span class="team ">🇺🇾 Uruguay</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">España 🇪🇸</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:22.0%"></div>
+          <div class="bx" style="width:20.8%"></div>
+          <div class="b2" style="width:57.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Uruguay 22%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana España 57%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 27 jun</div>
+        <div class="teams">
+          <span class="team ">🇨🇻 Cabo Verde</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">A. Saudita 🇸🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:33.2%"></div>
+          <div class="bx" style="width:23.1%"></div>
+          <div class="b2" style="width:43.6%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Cabo Verde 33%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana A. Saudita 44%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇪🇸 España</td><td>6.8</td><td>+4.9</td></tr><tr class='q1'><td>2</td><td>🇺🇾 Uruguay</td><td>4.8</td><td>+1.1</td></tr><tr class=''><td>3</td><td>🇸🇦 A. Saudita</td><td>2.8</td><td>-2.6</td></tr><tr class=''><td>4</td><td>🇨🇻 Cabo Verde</td><td>2.3</td><td>-3.4</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo I</h2>
+      <div class="match">
+        <div class="mdate">J1 · 16 jun</div>
+        <div class="teams">
+          <span class="team fav">🇫🇷 Francia</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
+          <span class="team away ">Senegal 🇸🇳</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:50.5%"></div>
+          <div class="bx" style="width:23.4%"></div>
+          <div class="b2" style="width:26.0%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Francia 51%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Senegal 26%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 17 jun</div>
+        <div class="teams">
+          <span class="team ">🇮🇶 Irak</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away fav">Noruega 🇳🇴</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:23.2%"></div>
+          <div class="bx" style="width:20.0%"></div>
+          <div class="b2" style="width:56.9%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Irak 23%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Noruega 57%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 22 jun</div>
+        <div class="teams">
+          <span class="team fav">🇫🇷 Francia</span>
+          <span class="scorebox"><span class="score">2 – 0</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Irak 🇮🇶</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:71.2%"></div>
+          <div class="bx" style="width:16.4%"></div>
+          <div class="b2" style="width:12.4%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Francia 71%</span>
+          <span class="gx">Empate 16%</span>
+          <span class="g2">Gana Irak 12%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 23 jun</div>
+        <div class="teams">
+          <span class="team ">🇳🇴 Noruega</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Senegal 🇸🇳</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:35.3%"></div>
+          <div class="bx" style="width:23.1%"></div>
+          <div class="b2" style="width:41.6%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Noruega 35%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Senegal 42%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 26 jun</div>
+        <div class="teams">
+          <span class="team fav">🇸🇳 Senegal</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Irak 🇮🇶</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:57.6%"></div>
+          <div class="bx" style="width:21.4%"></div>
+          <div class="b2" style="width:21.0%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Senegal 58%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Irak 21%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 26 jun</div>
+        <div class="teams">
+          <span class="team ">🇳🇴 Noruega</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away fav">Francia 🇫🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:23.4%"></div>
+          <div class="bx" style="width:20.4%"></div>
+          <div class="b2" style="width:56.1%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Noruega 23%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Francia 56%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇫🇷 Francia</td><td>5.9</td><td>+3.0</td></tr><tr class='q1'><td>2</td><td>🇸🇳 Senegal</td><td>4.4</td><td>+0.5</td></tr><tr class='q3'><td>3</td><td>🇳🇴 Noruega</td><td>4.1</td><td>-0.1</td></tr><tr class=''><td>4</td><td>🇮🇶 Irak</td><td>2.3</td><td>-3.4</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo J</h2>
+      <div class="match">
+        <div class="mdate">J1 · 17 jun</div>
+        <div class="teams">
+          <span class="team fav">🇦🇷 Argentina</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Argelia 🇩🇿</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:63.0%"></div>
+          <div class="bx" style="width:19.6%"></div>
+          <div class="b2" style="width:17.4%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Argentina 63%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Argelia 17%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 17 jun</div>
+        <div class="teams">
+          <span class="team fav">🇦🇹 Austria</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 9%</span></span>
+          <span class="team away ">Jordania 🇯🇴</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:62.7%"></div>
+          <div class="bx" style="width:18.7%"></div>
+          <div class="b2" style="width:18.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Austria 63%</span>
+          <span class="gx">Empate 19%</span>
+          <span class="g2">Gana Jordania 19%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 22 jun</div>
+        <div class="teams">
+          <span class="team fav">🇦🇷 Argentina</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Austria 🇦🇹</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:58.5%"></div>
+          <div class="bx" style="width:20.8%"></div>
+          <div class="b2" style="width:20.7%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Argentina 58%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Austria 21%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 23 jun</div>
+        <div class="teams">
+          <span class="team ">🇯🇴 Jordania</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Argelia 🇩🇿</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:22.2%"></div>
+          <div class="bx" style="width:20.3%"></div>
+          <div class="b2" style="width:57.6%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Jordania 22%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Argelia 58%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 28 jun</div>
+        <div class="teams">
+          <span class="team ">🇯🇴 Jordania</span>
+          <span class="scorebox"><span class="score">0 – 3</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Argentina 🇦🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:7.9%"></div>
+          <div class="bx" style="width:12.5%"></div>
+          <div class="b2" style="width:79.6%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Jordania 8%</span>
+          <span class="gx">Empate 13%</span>
+          <span class="g2">Gana Argentina 80%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 28 jun</div>
+        <div class="teams">
+          <span class="team ">🇩🇿 Argelia</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Austria 🇦🇹</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:33.7%"></div>
+          <div class="bx" style="width:23.0%"></div>
+          <div class="b2" style="width:43.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Argelia 34%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Austria 43%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇦🇷 Argentina</td><td>6.6</td><td>+4.2</td></tr><tr class='q1'><td>2</td><td>🇦🇹 Austria</td><td>4.4</td><td>+0.5</td></tr><tr class='q3'><td>3</td><td>🇩🇿 Argelia</td><td>3.9</td><td>-0.5</td></tr><tr class=''><td>4</td><td>🇯🇴 Jordania</td><td>2.0</td><td>-4.2</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo K</h2>
+      <div class="match">
+        <div class="mdate">J1 · 17 jun</div>
+        <div class="teams">
+          <span class="team fav">🇵🇹 Portugal</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">RD Congo 🇨🇩</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:68.3%"></div>
+          <div class="bx" style="width:17.3%"></div>
+          <div class="b2" style="width:14.4%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Portugal 68%</span>
+          <span class="gx">Empate 17%</span>
+          <span class="g2">Gana RD Congo 14%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 18 jun</div>
+        <div class="teams">
+          <span class="team ">🇺🇿 Uzbekistán</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Colombia 🇨🇴</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:21.3%"></div>
+          <div class="bx" style="width:20.6%"></div>
+          <div class="b2" style="width:58.0%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Uzbekistán 21%</span>
+          <span class="gx">Empate 21%</span>
+          <span class="g2">Gana Colombia 58%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 23 jun</div>
+        <div class="teams">
+          <span class="team fav">🇵🇹 Portugal</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Uzbekistán 🇺🇿</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:61.6%"></div>
+          <div class="bx" style="width:19.4%"></div>
+          <div class="b2" style="width:19.0%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Portugal 62%</span>
+          <span class="gx">Empate 19%</span>
+          <span class="g2">Gana Uzbekistán 19%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 24 jun</div>
+        <div class="teams">
+          <span class="team fav">🇨🇴 Colombia</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">RD Congo 🇨🇩</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:64.9%"></div>
+          <div class="bx" style="width:18.7%"></div>
+          <div class="b2" style="width:16.5%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Colombia 65%</span>
+          <span class="gx">Empate 19%</span>
+          <span class="g2">Gana RD Congo 16%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 28 jun</div>
+        <div class="teams">
+          <span class="team ">🇨🇴 Colombia</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Portugal 🇵🇹</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:35.4%"></div>
+          <div class="bx" style="width:22.8%"></div>
+          <div class="b2" style="width:41.7%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Colombia 35%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Portugal 42%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 28 jun</div>
+        <div class="teams">
+          <span class="team ">🇨🇩 RD Congo</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Uzbekistán 🇺🇿</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:31.6%"></div>
+          <div class="bx" style="width:23.2%"></div>
+          <div class="b2" style="width:45.3%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana RD Congo 32%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Uzbekistán 45%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🇵🇹 Portugal</td><td>5.7</td><td>+2.7</td></tr><tr class='q1'><td>2</td><td>🇨🇴 Colombia</td><td>5.4</td><td>+2.0</td></tr><tr class='q3'><td>3</td><td>🇺🇿 Uzbekistán</td><td>3.2</td><td>-1.7</td></tr><tr class=''><td>4</td><td>🇨🇩 RD Congo</td><td>2.5</td><td>-3.0</td></tr>
+      </table>
+    </div>
+    <div class="group">
+      <h2>Grupo L</h2>
+      <div class="match">
+        <div class="mdate">J1 · 17 jun</div>
+        <div class="teams">
+          <span class="team fav">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Croacia 🇭🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:49.6%"></div>
+          <div class="bx" style="width:23.0%"></div>
+          <div class="b2" style="width:27.4%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Inglaterra 50%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Croacia 27%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J1 · 18 jun</div>
+        <div class="teams">
+          <span class="team ">🇬🇭 Ghana</span>
+          <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Panamá 🇵🇦</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:31.0%"></div>
+          <div class="bx" style="width:22.8%"></div>
+          <div class="b2" style="width:46.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Ghana 31%</span>
+          <span class="gx">Empate 23%</span>
+          <span class="g2">Gana Panamá 46%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 23 jun</div>
+        <div class="teams">
+          <span class="team fav">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span>
+          <span class="scorebox"><span class="score">2 – 0</span><span class="exact">prob. marcador 11%</span></span>
+          <span class="team away ">Ghana 🇬🇭</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:76.5%"></div>
+          <div class="bx" style="width:14.3%"></div>
+          <div class="b2" style="width:9.2%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Inglaterra 77%</span>
+          <span class="gx">Empate 14%</span>
+          <span class="g2">Gana Ghana 9%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J2 · 24 jun</div>
+        <div class="teams">
+          <span class="team ">🇵🇦 Panamá</span>
+          <span class="scorebox"><span class="score">1 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Croacia 🇭🇷</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:20.0%"></div>
+          <div class="bx" style="width:20.0%"></div>
+          <div class="b2" style="width:60.0%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Panamá 20%</span>
+          <span class="gx">Empate 20%</span>
+          <span class="g2">Gana Croacia 60%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 27 jun</div>
+        <div class="teams">
+          <span class="team fav">🇭🇷 Croacia</span>
+          <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away ">Ghana 🇬🇭</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:67.5%"></div>
+          <div class="bx" style="width:17.6%"></div>
+          <div class="b2" style="width:14.9%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Croacia 67%</span>
+          <span class="gx">Empate 18%</span>
+          <span class="g2">Gana Ghana 15%</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="mdate">J3 · 27 jun</div>
+        <div class="teams">
+          <span class="team ">🇵🇦 Panamá</span>
+          <span class="scorebox"><span class="score">0 – 2</span><span class="exact">prob. marcador 10%</span></span>
+          <span class="team away fav">Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+        </div>
+        <div class="bar">
+          <div class="b1" style="width:12.8%"></div>
+          <div class="bx" style="width:17.1%"></div>
+          <div class="b2" style="width:70.1%"></div>
+        </div>
+        <div class="probs">
+          <span class="g1">Gana Panamá 13%</span>
+          <span class="gx">Empate 17%</span>
+          <span class="g2">Gana Inglaterra 70%</span>
+        </div>
+      </div>
+      <table class="standings">
+        <tr><th>#</th><th>Posiciones (proyección)</th><th>Pts</th><th>Dif</th></tr><tr class='q1'><td>1</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>6.4</td><td>+3.9</td></tr><tr class='q1'><td>2</td><td>🇭🇷 Croacia</td><td>5.3</td><td>+1.9</td></tr><tr class=''><td>3</td><td>🇵🇦 Panamá</td><td>3.0</td><td>-2.2</td></tr><tr class=''><td>4</td><td>🇬🇭 Ghana</td><td>2.2</td><td>-3.7</td></tr>
+      </table>
+    </div>
+</div>
+<h2 style="margin-top:34px">Fuerzas de los equipos (modelo)</h2>
+<table>
+<tr><th>#</th><th>Equipo</th><th>Ataque</th><th>Defensa</th><th>Pts FIFA</th><th>GF/p</th><th>GC/p</th><th>PJ</th></tr>
+<tr><td>1</td><td>🇪🇸 España</td><td>1.49</td><td>0.64</td><td>1874</td><td>2.74</td><td>0.96</td><td>27</td></tr><tr><td>2</td><td>🇦🇷 Argentina</td><td>1.37</td><td>0.59</td><td>1876</td><td>2.00</td><td>0.30</td><td>10</td></tr><tr><td>3</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>1.31</td><td>0.60</td><td>1827</td><td>2.04</td><td>0.52</td><td>25</td></tr><tr><td>4</td><td>🇫🇷 Francia</td><td>1.33</td><td>0.63</td><td>1871</td><td>1.77</td><td>0.92</td><td>26</td></tr><tr><td>5</td><td>🇳🇱 P. Bajos</td><td>1.31</td><td>0.72</td><td>1754</td><td>2.62</td><td>0.96</td><td>26</td></tr><tr><td>6</td><td>🇵🇹 Portugal</td><td>1.28</td><td>0.73</td><td>1766</td><td>2.31</td><td>1.12</td><td>26</td></tr><tr><td>7</td><td>🇩🇪 Alemania</td><td>1.24</td><td>0.72</td><td>1736</td><td>2.28</td><td>0.84</td><td>25</td></tr><tr><td>8</td><td>🇧🇪 Bélgica</td><td>1.20</td><td>0.73</td><td>1742</td><td>2.00</td><td>0.96</td><td>24</td></tr><tr><td>9</td><td>🇲🇦 Marruecos</td><td>1.17</td><td>0.72</td><td>1755</td><td>1.70</td><td>0.70</td><td>10</td></tr><tr><td>10</td><td>🇯🇵 Japón</td><td>1.28</td><td>0.83</td><td>1662</td><td>3.27</td><td>1.13</td><td>15</td></tr><tr><td>11</td><td>🇨🇴 Colombia</td><td>1.19</td><td>0.75</td><td>1698</td><td>2.40</td><td>0.60</td><td>10</td></tr><tr><td>12</td><td>🇧🇷 Brasil</td><td>1.18</td><td>0.75</td><td>1766</td><td>1.62</td><td>1.00</td><td>8</td></tr><tr><td>13</td><td>🇭🇷 Croacia</td><td>1.18</td><td>0.76</td><td>1715</td><td>2.09</td><td>1.00</td><td>23</td></tr><tr><td>14</td><td>🇮🇷 Irán</td><td>1.16</td><td>0.81</td><td>1620</td><td>2.71</td><td>0.76</td><td>17</td></tr><tr><td>15</td><td>🇸🇳 Senegal</td><td>1.04</td><td>0.73</td><td>1685</td><td>1.27</td><td>0.36</td><td>11</td></tr><tr><td>16</td><td>🇺🇾 Uruguay</td><td>1.07</td><td>0.78</td><td>1673</td><td>1.64</td><td>0.73</td><td>11</td></tr><tr><td>17</td><td>🇳🇴 Noruega</td><td>1.18</td><td>0.90</td><td>1557</td><td>3.22</td><td>1.00</td><td>18</td></tr><tr><td>18</td><td>🇲🇽 México</td><td>1.04</td><td>0.78</td><td>1687</td><td>1.31</td><td>0.85</td><td>13</td></tr><tr><td>19</td><td>🇦🇹 Austria</td><td>1.09</td><td>0.84</td><td>1597</td><td>2.29</td><td>0.88</td><td>24</td></tr><tr><td>20</td><td>🇨🇭 Suiza</td><td>1.04</td><td>0.81</td><td>1650</td><td>1.62</td><td>1.00</td><td>21</td></tr><tr><td>21</td><td>🇺🇸 EE.UU.</td><td>0.99</td><td>0.87</td><td>1671</td><td>1.07</td><td>1.43</td><td>14</td></tr><tr><td>22</td><td>🇰🇷 Corea del Sur</td><td>1.01</td><td>0.88</td><td>1592</td><td>1.80</td><td>1.07</td><td>15</td></tr><tr><td>23</td><td>🇩🇿 Argelia</td><td>1.00</td><td>0.89</td><td>1571</td><td>1.90</td><td>0.80</td><td>10</td></tr><tr><td>24</td><td>🇪🇬 Egipto</td><td>0.97</td><td>0.86</td><td>1562</td><td>1.72</td><td>0.83</td><td>29</td></tr><tr><td>25</td><td>🇨🇮 C. de Marfil</td><td>0.96</td><td>0.86</td><td>1541</td><td>1.83</td><td>0.70</td><td>30</td></tr><tr><td>26</td><td>🇦🇺 Australia</td><td>0.97</td><td>0.87</td><td>1579</td><td>1.62</td><td>0.85</td><td>13</td></tr><tr><td>27</td><td>🇹🇷 Turquía</td><td>1.01</td><td>0.92</td><td>1606</td><td>1.76</td><td>1.44</td><td>25</td></tr><tr><td>28</td><td>🇪🇨 Ecuador</td><td>0.96</td><td>0.89</td><td>1599</td><td>1.33</td><td>1.00</td><td>9</td></tr><tr><td>29</td><td>🇨🇿 R. Checa</td><td>0.96</td><td>0.98</td><td>1506</td><td>2.00</td><td>1.22</td><td>23</td></tr><tr><td>30</td><td>🇹🇳 Túnez</td><td>0.85</td><td>0.88</td><td>1476</td><td>1.48</td><td>0.41</td><td>27</td></tr><tr><td>31</td><td>🇨🇦 Canadá</td><td>0.86</td><td>0.92</td><td>1559</td><td>0.93</td><td>1.07</td><td>15</td></tr><tr><td>32</td><td>🇺🇿 Uzbekistán</td><td>0.89</td><td>0.98</td><td>1459</td><td>1.82</td><td>0.82</td><td>17</td></tr><tr><td>33</td><td>🇸🇪 Suecia</td><td>0.94</td><td>1.03</td><td>1510</td><td>1.84</td><td>1.58</td><td>19</td></tr><tr><td>34</td><td>🇵🇦 Panamá</td><td>0.87</td><td>1.03</td><td>1539</td><td>1.09</td><td>1.73</td><td>11</td></tr><tr><td>35</td><td>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</td><td>0.85</td><td>1.03</td><td>1503</td><td>1.29</td><td>1.52</td><td>21</td></tr><tr><td>36</td><td>🇮🇶 Irak</td><td>0.85</td><td>1.06</td><td>1451</td><td>1.58</td><td>1.32</td><td>19</td></tr><tr><td>37</td><td>🇸🇦 A. Saudita</td><td>0.87</td><td>1.09</td><td>1423</td><td>1.88</td><td>1.12</td><td>8</td></tr><tr><td>38</td><td>🇵🇾 Paraguay</td><td>0.84</td><td>1.07</td><td>1505</td><td>1.00</td><td>1.75</td><td>8</td></tr><tr><td>39</td><td>🇿🇦 Sudáfrica</td><td>0.80</td><td>1.03</td><td>1433</td><td>1.29</td><td>0.93</td><td>14</td></tr><tr><td>40</td><td>🇶🇦 Catar</td><td>0.81</td><td>1.04</td><td>1450</td><td>1.32</td><td>1.24</td><td>25</td></tr><tr><td>41</td><td>🇨🇩 RD Congo</td><td>0.80</td><td>1.08</td><td>1420</td><td>1.25</td><td>1.00</td><td>8</td></tr><tr><td>42</td><td>🇨🇻 Cabo Verde</td><td>0.75</td><td>1.10</td><td>1371</td><td>1.33</td><td>0.96</td><td>27</td></tr><tr><td>43</td><td>🇭🇹 Haití</td><td>0.91</td><td>1.26</td><td>1293</td><td>2.79</td><td>1.29</td><td>14</td></tr><tr><td>44</td><td>🇬🇭 Ghana</td><td>0.78</td><td>1.14</td><td>1347</td><td>1.59</td><td>1.07</td><td>27</td></tr><tr><td>45</td><td>🇨🇼 Curazao</td><td>0.83</td><td>1.20</td><td>1295</td><td>2.25</td><td>0.62</td><td>8</td></tr><tr><td>46</td><td>🇯🇴 Jordania</td><td>0.81</td><td>1.21</td><td>1388</td><td>1.63</td><td>1.84</td><td>19</td></tr><tr><td>47</td><td>🇳🇿 N. Zelanda</td><td>0.81</td><td>1.22</td><td>1276</td><td>2.22</td><td>0.56</td><td>9</td></tr><tr><td>48</td><td>🇧🇦 Bosnia</td><td>0.76</td><td>1.19</td><td>1387</td><td>1.28</td><td>1.67</td><td>18</td></tr>
+</table>
+<p class="note"><b>Nota metodológica:</b> modelo de Poisson independiente por equipo. λ_A = ataque_A × defensa_B × μ
+(cancha neutral; +10% para los anfitriones México, EE.UU. y Canadá). Las fuerzas combinan <b>65% ranking FIFA</b>
+(10-jun-2026, escala tipo Elo) y <b>35% promedio de goles 2023–2024</b> (API-Football, plan gratuito), con suavizado
+para muestras pequeñas — la parte de ranking corrige que los goles no ponderan la fuerza del rival. El "marcador" es la
+celda más probable de la matriz 0–6 goles; aun siendo el más probable, rara vez supera el 15%: úsalo como guía, no como certeza.</p>
+</body>
+</html>

@@ -16,6 +16,19 @@
   .group h2 { font-size:15px; color:#58a6ff; margin-bottom:10px; letter-spacing:.5px; }
   .match { padding:8px 0; border-top:1px solid var(--line); }
   .match:first-of-type { border-top:none; }
+  .match.hit { background:rgba(46,160,67,.10); border-left:3px solid #2ea043; padding-left:8px; border-radius:4px; }
+  .match.exact { background:rgba(210,153,34,.14); border-left:3px solid #d29922; padding-left:8px; border-radius:4px; }
+  .match.miss { opacity:.6; }
+  .result { display:flex; align-items:center; justify-content:center; gap:8px; margin:4px 0 2px; font-size:11px; }
+  .rscore { background:#0d3a1a; color:#7ee787; font-weight:700; border-radius:5px; padding:1px 9px; }
+  .match.miss .rscore { background:#3a0d0d; color:#ff7b72; }
+  .match.exact .rscore { background:#3a2f0d; color:#f0c674; }
+  .rtag { color:var(--dim); }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin:0 0 20px;
+             padding:10px 14px; background:var(--card); border:1px solid var(--line); border-radius:8px; font-size:12.5px; }
+  .legend b { color:var(--txt); }
+  .chip { display:inline-flex; align-items:center; gap:5px; }
+  .sw { width:12px; height:12px; border-radius:3px; display:inline-block; }
   .mdate { font-size:10.5px; color:var(--dim); text-align:center; margin-bottom:2px; }
   .standings { width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;
                 border-top:2px solid var(--line); }
@@ -45,16 +58,23 @@
 <p class="sub">Marcador más probable por partido (fase de grupos) · barras = prob. gana local / empate / gana visitante ·
 calibrado con partidos internacionales de 2023–2024 (API-Football) · μ global = 1.83 goles/partido ·
 <a href="index.html" style="color:#58a6ff">ver plantilla de eliminatoria completa →</a></p>
+<div class="legend">
+  <b>Resultados reales hasta 13 jun:</b>
+  <span class="chip"><span class="sw" style="background:#2ea043"></span> acertó resultado</span>
+  <span class="chip"><span class="sw" style="background:#d29922"></span> 🎯 marcador exacto</span>
+  <span class="chip" style="opacity:.6"><span class="sw" style="background:#6e7681"></span> falló</span>
+  <span style="margin-left:auto; color:#7ee787"><b>3/5</b> resultados · <b>1</b> marcador exacto</span>
+</div>
 <div class="grid">
     <div class="group">
       <h2>Grupo A</h2>
-      <div class="match">
+      <div class="match hit">
         <div class="mdate">J1 · 11 jun</div>
         <div class="teams">
           <span class="team fav">🇲🇽 México</span>
           <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
           <span class="team away ">Sudáfrica 🇿🇦</span>
-        </div>
+        </div><div class="result"><span class="rscore">2 – 0</span><span class="rtag">✔ acertó resultado</span></div>
         <div class="bar">
           <div class="b1" style="width:60.6%"></div>
           <div class="bx" style="width:20.2%"></div>
@@ -66,13 +86,13 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Sudáfrica 19%</span>
         </div>
       </div>
-      <div class="match">
-        <div class="mdate">J1 · 12 jun</div>
+      <div class="match miss">
+        <div class="mdate">J1 · 11 jun</div>
         <div class="teams">
           <span class="team fav">🇰🇷 Corea del Sur</span>
           <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
           <span class="team away ">R. Checa 🇨🇿</span>
-        </div>
+        </div><div class="result"><span class="rscore">2 – 1</span><span class="rtag">✗ falló</span></div>
         <div class="bar">
           <div class="b1" style="width:43.9%"></div>
           <div class="bx" style="width:22.7%"></div>
@@ -84,7 +104,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana R. Checa 33%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 18 jun</div>
         <div class="teams">
           <span class="team fav">🇨🇿 R. Checa</span>
@@ -102,7 +122,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Sudáfrica 31%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 19 jun</div>
         <div class="teams">
           <span class="team fav">🇲🇽 México</span>
@@ -120,7 +140,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Corea del Sur 30%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 25 jun</div>
         <div class="teams">
           <span class="team ">🇿🇦 Sudáfrica</span>
@@ -138,7 +158,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Corea del Sur 52%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 25 jun</div>
         <div class="teams">
           <span class="team ">🇨🇿 R. Checa</span>
@@ -162,13 +182,13 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo B</h2>
-      <div class="match">
+      <div class="match miss">
         <div class="mdate">J1 · 12 jun</div>
         <div class="teams">
           <span class="team fav">🇨🇦 Canadá</span>
           <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
           <span class="team away ">Bosnia 🇧🇦</span>
-        </div>
+        </div><div class="result"><span class="rscore">1 – 1</span><span class="rtag">✗ falló</span></div>
         <div class="bar">
           <div class="b1" style="width:55.1%"></div>
           <div class="bx" style="width:21.4%"></div>
@@ -180,13 +200,13 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Bosnia 24%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match exact">
         <div class="mdate">J1 · 13 jun</div>
         <div class="teams">
           <span class="team ">🇶🇦 Catar</span>
           <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 10%</span></span>
           <span class="team away fav">Suiza 🇨🇭</span>
-        </div>
+        </div><div class="result"><span class="rscore">1 – 1</span><span class="rtag">🎯 marcador exacto</span></div>
         <div class="bar">
           <div class="b1" style="width:22.9%"></div>
           <div class="bx" style="width:21.8%"></div>
@@ -198,7 +218,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Suiza 55%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 18 jun</div>
         <div class="teams">
           <span class="team fav">🇨🇭 Suiza</span>
@@ -216,7 +236,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Bosnia 18%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 19 jun</div>
         <div class="teams">
           <span class="team fav">🇨🇦 Canadá</span>
@@ -234,7 +254,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Catar 29%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 24 jun</div>
         <div class="teams">
           <span class="team ">🇧🇦 Bosnia</span>
@@ -252,7 +272,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Catar 45%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 24 jun</div>
         <div class="teams">
           <span class="team fav">🇨🇭 Suiza</span>
@@ -276,7 +296,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo C</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 14 jun</div>
         <div class="teams">
           <span class="team ">🇧🇷 Brasil</span>
@@ -294,7 +314,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Marruecos 40%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 14 jun</div>
         <div class="teams">
           <span class="team ">🇭🇹 Haití</span>
@@ -312,7 +332,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Escocia 44%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 20 jun</div>
         <div class="teams">
           <span class="team ">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span>
@@ -330,7 +350,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Marruecos 62%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 20 jun</div>
         <div class="teams">
           <span class="team fav">🇧🇷 Brasil</span>
@@ -348,7 +368,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Haití 16%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 25 jun</div>
         <div class="teams">
           <span class="team ">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</span>
@@ -366,7 +386,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Brasil 61%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 25 jun</div>
         <div class="teams">
           <span class="team fav">🇲🇦 Marruecos</span>
@@ -390,13 +410,13 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo D</h2>
-      <div class="match">
-        <div class="mdate">J1 · 13 jun</div>
+      <div class="match hit">
+        <div class="mdate">J1 · 12 jun</div>
         <div class="teams">
           <span class="team fav">🇺🇸 EE.UU.</span>
           <span class="scorebox"><span class="score">2 – 1</span><span class="exact">prob. marcador 10%</span></span>
           <span class="team away ">Paraguay 🇵🇾</span>
-        </div>
+        </div><div class="result"><span class="rscore">4 – 1</span><span class="rtag">✔ acertó resultado</span></div>
         <div class="bar">
           <div class="b1" style="width:55.3%"></div>
           <div class="bx" style="width:20.9%"></div>
@@ -408,7 +428,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Paraguay 24%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 14 jun</div>
         <div class="teams">
           <span class="team fav">🇦🇺 Australia</span>
@@ -426,7 +446,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Turquía 38%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 19 jun</div>
         <div class="teams">
           <span class="team fav">🇺🇸 EE.UU.</span>
@@ -444,7 +464,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Australia 34%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 20 jun</div>
         <div class="teams">
           <span class="team fav">🇹🇷 Turquía</span>
@@ -462,7 +482,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Paraguay 28%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 26 jun</div>
         <div class="teams">
           <span class="team ">🇹🇷 Turquía</span>
@@ -480,7 +500,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana EE.UU. 43%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 26 jun</div>
         <div class="teams">
           <span class="team ">🇵🇾 Paraguay</span>
@@ -504,7 +524,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo E</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 14 jun</div>
         <div class="teams">
           <span class="team fav">🇩🇪 Alemania</span>
@@ -522,7 +542,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Curazao 13%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 15 jun</div>
         <div class="teams">
           <span class="team fav">🇨🇮 C. de Marfil</span>
@@ -540,7 +560,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Ecuador 37%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 20 jun</div>
         <div class="teams">
           <span class="team fav">🇩🇪 Alemania</span>
@@ -558,7 +578,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana C. de Marfil 25%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 21 jun</div>
         <div class="teams">
           <span class="team fav">🇪🇨 Ecuador</span>
@@ -576,7 +596,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Curazao 24%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 25 jun</div>
         <div class="teams">
           <span class="team ">🇪🇨 Ecuador</span>
@@ -594,7 +614,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Alemania 55%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 25 jun</div>
         <div class="teams">
           <span class="team ">🇨🇼 Curazao</span>
@@ -618,7 +638,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo F</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 14 jun</div>
         <div class="teams">
           <span class="team fav">🇳🇱 P. Bajos</span>
@@ -636,7 +656,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Japón 33%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 15 jun</div>
         <div class="teams">
           <span class="team ">🇸🇪 Suecia</span>
@@ -654,7 +674,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Túnez 40%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 20 jun</div>
         <div class="teams">
           <span class="team fav">🇳🇱 P. Bajos</span>
@@ -672,7 +692,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Suecia 18%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 21 jun</div>
         <div class="teams">
           <span class="team ">🇹🇳 Túnez</span>
@@ -690,7 +710,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Japón 55%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 26 jun</div>
         <div class="teams">
           <span class="team fav">🇯🇵 Japón</span>
@@ -708,7 +728,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Suecia 22%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 26 jun</div>
         <div class="teams">
           <span class="team ">🇹🇳 Túnez</span>
@@ -732,7 +752,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo G</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 15 jun</div>
         <div class="teams">
           <span class="team fav">🇧🇪 Bélgica</span>
@@ -750,7 +770,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Egipto 26%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 16 jun</div>
         <div class="teams">
           <span class="team fav">🇮🇷 Irán</span>
@@ -768,7 +788,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana N. Zelanda 16%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 21 jun</div>
         <div class="teams">
           <span class="team fav">🇧🇪 Bélgica</span>
@@ -786,7 +806,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Irán 34%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 22 jun</div>
         <div class="teams">
           <span class="team ">🇳🇿 N. Zelanda</span>
@@ -804,7 +824,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Egipto 57%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 27 jun</div>
         <div class="teams">
           <span class="team ">🇳🇿 N. Zelanda</span>
@@ -822,7 +842,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Bélgica 70%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 27 jun</div>
         <div class="teams">
           <span class="team ">🇪🇬 Egipto</span>
@@ -846,7 +866,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo H</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 15 jun</div>
         <div class="teams">
           <span class="team fav">🇪🇸 España</span>
@@ -864,7 +884,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Cabo Verde 8%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 16 jun</div>
         <div class="teams">
           <span class="team ">🇸🇦 A. Saudita</span>
@@ -882,7 +902,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Uruguay 57%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 21 jun</div>
         <div class="teams">
           <span class="team fav">🇪🇸 España</span>
@@ -900,7 +920,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana A. Saudita 10%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 22 jun</div>
         <div class="teams">
           <span class="team fav">🇺🇾 Uruguay</span>
@@ -918,7 +938,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Cabo Verde 18%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 27 jun</div>
         <div class="teams">
           <span class="team ">🇺🇾 Uruguay</span>
@@ -936,7 +956,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana España 57%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 27 jun</div>
         <div class="teams">
           <span class="team ">🇨🇻 Cabo Verde</span>
@@ -960,7 +980,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo I</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 16 jun</div>
         <div class="teams">
           <span class="team fav">🇫🇷 Francia</span>
@@ -978,7 +998,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Senegal 26%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 17 jun</div>
         <div class="teams">
           <span class="team ">🇮🇶 Irak</span>
@@ -996,7 +1016,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Noruega 57%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 22 jun</div>
         <div class="teams">
           <span class="team fav">🇫🇷 Francia</span>
@@ -1014,7 +1034,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Irak 12%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 23 jun</div>
         <div class="teams">
           <span class="team ">🇳🇴 Noruega</span>
@@ -1032,7 +1052,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Senegal 42%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 26 jun</div>
         <div class="teams">
           <span class="team fav">🇸🇳 Senegal</span>
@@ -1050,7 +1070,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Irak 21%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 26 jun</div>
         <div class="teams">
           <span class="team ">🇳🇴 Noruega</span>
@@ -1074,7 +1094,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo J</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 17 jun</div>
         <div class="teams">
           <span class="team fav">🇦🇷 Argentina</span>
@@ -1092,7 +1112,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Argelia 17%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 17 jun</div>
         <div class="teams">
           <span class="team fav">🇦🇹 Austria</span>
@@ -1110,7 +1130,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Jordania 19%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 22 jun</div>
         <div class="teams">
           <span class="team fav">🇦🇷 Argentina</span>
@@ -1128,7 +1148,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Austria 21%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 23 jun</div>
         <div class="teams">
           <span class="team ">🇯🇴 Jordania</span>
@@ -1146,7 +1166,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Argelia 58%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 28 jun</div>
         <div class="teams">
           <span class="team ">🇯🇴 Jordania</span>
@@ -1164,7 +1184,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Argentina 80%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 28 jun</div>
         <div class="teams">
           <span class="team ">🇩🇿 Argelia</span>
@@ -1188,7 +1208,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo K</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 17 jun</div>
         <div class="teams">
           <span class="team fav">🇵🇹 Portugal</span>
@@ -1206,7 +1226,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana RD Congo 14%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 18 jun</div>
         <div class="teams">
           <span class="team ">🇺🇿 Uzbekistán</span>
@@ -1224,7 +1244,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Colombia 58%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 23 jun</div>
         <div class="teams">
           <span class="team fav">🇵🇹 Portugal</span>
@@ -1242,7 +1262,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Uzbekistán 19%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 24 jun</div>
         <div class="teams">
           <span class="team fav">🇨🇴 Colombia</span>
@@ -1260,7 +1280,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana RD Congo 16%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 28 jun</div>
         <div class="teams">
           <span class="team ">🇨🇴 Colombia</span>
@@ -1278,7 +1298,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Portugal 42%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 28 jun</div>
         <div class="teams">
           <span class="team ">🇨🇩 RD Congo</span>
@@ -1302,7 +1322,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo L</h2>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 17 jun</div>
         <div class="teams">
           <span class="team fav">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span>
@@ -1320,7 +1340,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Croacia 27%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J1 · 18 jun</div>
         <div class="teams">
           <span class="team ">🇬🇭 Ghana</span>
@@ -1338,7 +1358,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Panamá 46%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 23 jun</div>
         <div class="teams">
           <span class="team fav">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</span>
@@ -1356,7 +1376,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Ghana 9%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J2 · 24 jun</div>
         <div class="teams">
           <span class="team ">🇵🇦 Panamá</span>
@@ -1374,7 +1394,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Croacia 60%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 27 jun</div>
         <div class="teams">
           <span class="team fav">🇭🇷 Croacia</span>
@@ -1392,7 +1412,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
           <span class="g2">Gana Ghana 15%</span>
         </div>
       </div>
-      <div class="match">
+      <div class="match ">
         <div class="mdate">J3 · 27 jun</div>
         <div class="teams">
           <span class="team ">🇵🇦 Panamá</span>

@@ -78,7 +78,7 @@ PAIRINGS = [(0, 1), (2, 3), (0, 2), (3, 1), (3, 0), (1, 2)]
 
 # Calendario real de fase de grupos (local, visitante, fecha)
 SCHEDULE = {
-    "A": [("Mexico", "South Africa", "11 jun"), ("South Korea", "Czech Republic", "12 jun"),
+    "A": [("Mexico", "South Africa", "11 jun"), ("South Korea", "Czech Republic", "11 jun"),
           ("Czech Republic", "South Africa", "18 jun"), ("Mexico", "South Korea", "19 jun"),
           ("South Africa", "South Korea", "25 jun"), ("Czech Republic", "Mexico", "25 jun")],
     "B": [("Canada", "Bosnia and Herzegovina", "12 jun"), ("Qatar", "Switzerland", "13 jun"),
@@ -87,7 +87,7 @@ SCHEDULE = {
     "C": [("Brazil", "Morocco", "14 jun"), ("Haiti", "Scotland", "14 jun"),
           ("Scotland", "Morocco", "20 jun"), ("Brazil", "Haiti", "20 jun"),
           ("Scotland", "Brazil", "25 jun"), ("Morocco", "Haiti", "25 jun")],
-    "D": [("USA", "Paraguay", "13 jun"), ("Australia", "Turkey", "14 jun"),
+    "D": [("USA", "Paraguay", "12 jun"), ("Australia", "Turkey", "14 jun"),
           ("USA", "Australia", "19 jun"), ("Turkey", "Paraguay", "20 jun"),
           ("Turkey", "USA", "26 jun"), ("Paraguay", "Australia", "26 jun")],
     "E": [("Germany", "Curacao", "14 jun"), ("Ivory Coast", "Ecuador", "15 jun"),
@@ -114,6 +114,16 @@ SCHEDULE = {
     "L": [("England", "Croatia", "17 jun"), ("Ghana", "Panama", "18 jun"),
           ("England", "Ghana", "23 jun"), ("Panama", "Croatia", "24 jun"),
           ("Croatia", "Ghana", "27 jun"), ("Panama", "England", "27 jun")],
+}
+
+# Resultados REALES jugados (clave = (local, visitante) tal cual en SCHEDULE).
+# Actualizado al 13 jun 2026. Marca: 🎯 marcador exacto / ✔ resultado / atenuado = falló.
+RESULTS = {
+    ("Mexico", "South Africa"): (2, 0),          # 11 jun
+    ("South Korea", "Czech Republic"): (2, 1),   # 11 jun (jugado un día antes de lo programado)
+    ("Canada", "Bosnia and Herzegovina"): (1, 1),# 12 jun
+    ("USA", "Paraguay"): (4, 1),                 # 12 jun (jugado un día antes de lo programado)
+    ("Qatar", "Switzerland"): (1, 1),            # 13 jun
 }
 
 
@@ -219,9 +229,28 @@ def predict(a, b, st, mu):
     }
 
 
+def score_summary(st, mu):
+    """Cuenta aciertos de resultado y de marcador exacto sobre lo ya jugado."""
+    played = hits = exacts = 0
+    for fixtures in SCHEDULE.values():
+        for a, b, _ in fixtures:
+            res = RESULTS.get((a, b))
+            if not res:
+                continue
+            played += 1
+            sa, sb = predict(a, b, st, mu)["score"]
+            ra, rb = res
+            if (sa, sb) == (ra, rb):
+                exacts += 1; hits += 1
+            elif ((sa > sb) - (sa < sb)) == ((ra > rb) - (ra < rb)):
+                hits += 1
+    return played, hits, exacts
+
+
 def render(st, mu):
     standings = expected_standings(st, mu)
     qualified_thirds = {team for _, team in best_thirds(standings)}
+    played, hits, exacts = score_summary(st, mu)
     rows = []
     for g, fixtures in SCHEDULE.items():
         cards = []
@@ -229,14 +258,29 @@ def render(st, mu):
             p = predict(a, b, st, mu)
             sa, sb = p["score"]
             fav = "home" if p["p1"] >= max(p["px"], p["p2"]) else ("draw" if p["px"] >= p["p2"] else "away")
+            # Resultado real (si ya se jugó): clasifica el acierto y colorea
+            res = RESULTS.get((a, b))
+            mcls, badge = "", ""
+            if res:
+                ra, rb = res
+                pred_sign = (sa > sb) - (sa < sb)
+                real_sign = (ra > rb) - (ra < rb)
+                if (sa, sb) == (ra, rb):
+                    mcls, tag = "exact", "🎯 marcador exacto"
+                elif pred_sign == real_sign:
+                    mcls, tag = "hit", "✔ acertó resultado"
+                else:
+                    mcls, tag = "miss", "✗ falló"
+                badge = (f'<div class="result"><span class="rscore">{ra} – {rb}</span>'
+                         f'<span class="rtag">{tag}</span></div>')
             cards.append(f"""
-      <div class="match">
+      <div class="match {mcls}">
         <div class="mdate">J{k // 2 + 1} · {date}</div>
         <div class="teams">
           <span class="team {'fav' if fav == 'home' else ''}">{FLAGS[a]} {NAMES_ES[a]}</span>
           <span class="scorebox"><span class="score">{sa} – {sb}</span><span class="exact">prob. marcador {p['p_score'] * 100:.0f}%</span></span>
           <span class="team away {'fav' if fav == 'away' else ''}">{NAMES_ES[b]} {FLAGS[b]}</span>
-        </div>
+        </div>{badge}
         <div class="bar">
           <div class="b1" style="width:{p['p1'] * 100:.1f}%"></div>
           <div class="bx" style="width:{p['px'] * 100:.1f}%"></div>
@@ -285,6 +329,19 @@ def render(st, mu):
   .group h2 {{ font-size:15px; color:#58a6ff; margin-bottom:10px; letter-spacing:.5px; }}
   .match {{ padding:8px 0; border-top:1px solid var(--line); }}
   .match:first-of-type {{ border-top:none; }}
+  .match.hit {{ background:rgba(46,160,67,.10); border-left:3px solid #2ea043; padding-left:8px; border-radius:4px; }}
+  .match.exact {{ background:rgba(210,153,34,.14); border-left:3px solid #d29922; padding-left:8px; border-radius:4px; }}
+  .match.miss {{ opacity:.6; }}
+  .result {{ display:flex; align-items:center; justify-content:center; gap:8px; margin:4px 0 2px; font-size:11px; }}
+  .rscore {{ background:#0d3a1a; color:#7ee787; font-weight:700; border-radius:5px; padding:1px 9px; }}
+  .match.miss .rscore {{ background:#3a0d0d; color:#ff7b72; }}
+  .match.exact .rscore {{ background:#3a2f0d; color:#f0c674; }}
+  .rtag {{ color:var(--dim); }}
+  .legend {{ display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin:0 0 20px;
+             padding:10px 14px; background:var(--card); border:1px solid var(--line); border-radius:8px; font-size:12.5px; }}
+  .legend b {{ color:var(--txt); }}
+  .chip {{ display:inline-flex; align-items:center; gap:5px; }}
+  .sw {{ width:12px; height:12px; border-radius:3px; display:inline-block; }}
   .mdate {{ font-size:10.5px; color:var(--dim); text-align:center; margin-bottom:2px; }}
   .standings {{ width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;
                 border-top:2px solid var(--line); }}
@@ -314,6 +371,13 @@ def render(st, mu):
 <p class="sub">Marcador más probable por partido (fase de grupos) · barras = prob. gana local / empate / gana visitante ·
 calibrado con partidos internacionales de 2023–2024 (API-Football) · μ global = {mu:.2f} goles/partido ·
 <a href="index.html" style="color:#58a6ff">ver plantilla de eliminatoria completa →</a></p>
+<div class="legend">
+  <b>Resultados reales hasta 13 jun:</b>
+  <span class="chip"><span class="sw" style="background:#2ea043"></span> acertó resultado</span>
+  <span class="chip"><span class="sw" style="background:#d29922"></span> 🎯 marcador exacto</span>
+  <span class="chip" style="opacity:.6"><span class="sw" style="background:#6e7681"></span> falló</span>
+  <span style="margin-left:auto; color:#7ee787"><b>{hits}/{played}</b> resultados · <b>{exacts}</b> marcador exacto</span>
+</div>
 <div class="grid">{''.join(rows)}
 </div>
 <h2 style="margin-top:34px">Fuerzas de los equipos (modelo)</h2>

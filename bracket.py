@@ -11,7 +11,8 @@ import sys
 from pathlib import Path
 
 from predict import (FLAGS, MAX_GOALS, NAMES_ES, SCHEDULE, best_thirds,
-                     expected_standings, load_team_stats, poisson, predict,
+                     expected_standings, grade, is_today, load_results,
+                     load_team_stats, poisson, predict, real_result,
                      strengths)
 
 OUT = Path(__file__).parent / "index.html"
@@ -84,6 +85,7 @@ def main():
     stats = load_team_stats()
     st, mu = strengths(stats)
     standings = expected_standings(st, mu)
+    results = load_results()
 
     firsts = {g: rows[0][0] for g, rows in standings.items()}
     seconds = {g: rows[1][0] for g, rows in standings.items()}
@@ -164,11 +166,21 @@ def main():
         (ga, gb), psc = scores[m]
         wg, lg = max(ga, gb), min(ga, gb)
         date, city = KO_INFO.get(m, ("", ""))
-        return (f"<div class='m {cls}'>"
+        # Resultado real: solo si el cruce proyectado coincide con lo jugado
+        real = real_result(a, b, results)
+        rcls, rbadge = "", ""
+        if real is not None:
+            ra, rb = real
+            rcls, tag = grade((ga, gb), real)
+            rbadge = (f"<div class='rreal'><span class='rrs'>{ra}–{rb}</span>"
+                      f"<span class='rrt'>{tag}</span></div>")
+        elif is_today(date):
+            rcls = "today"
+        return (f"<div class='m {cls} {rcls}'>"
                 f"<div class='mhead'><span class='mnum'>P{m}</span>"
                 f"<span class='mdate'>📅 {date} · {city}</span></div>"
                 f"<div class='lbl'>{labels[m]}</div>"
-                f"{team_html(a, m, ga)}{team_html(b, m, gb)}"
+                f"{team_html(a, m, ga)}{team_html(b, m, gb)}{rbadge}"
                 f"<div class='sc'><span>Gana <b>{NAMES_ES[w]}</b> {wg}–{lg} a {NAMES_ES[loser]}</span>"
                 f"<span class='odds'>{winprob[m] * 100:.0f}% · {cuota(winprob[m])}</span></div>"
                 f"<div class='why'>{why_text(m)}</div></div>")
@@ -199,8 +211,17 @@ def main():
                 rows += (f"<div class='t {'win' if t == wt else ''}'>"
                          f"<span class='n'>{FLAGS[t]} {NAMES_ES[t]}</span>"
                          f"<span class='gl'>{goals}</span></div>")
-            cards += (f"<div class='mg'><div class='mghead'><span>J{k // 2 + 1} · {date}</span>"
-                      f"<span class='mgr'>{res} {pct * 100:.0f}%</span></div>{rows}</div>")
+            real = real_result(a, b, results)
+            if real is not None:
+                ra, rb = real
+                rcls, tag = grade((sa, sb), real)
+                mgr = f"<span class='mgr'>{tag} {ra}–{rb}</span>"
+            elif is_today(date):
+                rcls, mgr = "today", f"<span class='mgr'>🔴 HOY · {res} {pct * 100:.0f}%</span>"
+            else:
+                rcls, mgr = "", f"<span class='mgr'>{res} {pct * 100:.0f}%</span>"
+            cards += (f"<div class='mg {rcls}'><div class='mghead'><span>J{k // 2 + 1} · {date}</span>"
+                      f"{mgr}</div>{rows}</div>")
         q = [t for t, _, _ in [standings[g][0], standings[g][1]]]
         tercero = standings[g][2][0]
         pasan = f"Avanzan: <b>{NAMES_ES[q[0]]}</b> y <b>{NAMES_ES[q[1]]}</b>"
@@ -225,19 +246,29 @@ def main():
                 res, pct = f"Gana {NAMES_ES[a]}", p["p1"]
             else:
                 res, pct = f"Gana {NAMES_ES[b]}", p["p2"]
-            hoy = " · HOY" if date == "11 jun" else ""
             tip = (f"{NAMES_ES[a]} vs {NAMES_ES[b]} ({date}): {res} con {pct * 100:.0f}% "
                    f"(cuota {cuota(pct)}); marcador más probable {sa}–{sb} "
                    f"({p['p_score'] * 100:.0f}% exacto). Gana local {p['p1'] * 100:.0f}% / "
                    f"empate {p['px'] * 100:.0f}% / gana visitante {p['p2'] * 100:.0f}%")
+            # Resultado real: colorea el acierto; si no, marca "hoy"
+            real = real_result(a, b, results)
+            if real is not None:
+                ra, rb = real
+                rcls, tag = grade((sa, sb), real)
+                fd = date
+                fr = f"{tag} <b>{ra}–{rb}</b>"
+            elif is_today(date):
+                rcls, fd, fr = "today", f"{date} · 🔴HOY", f"{res} <b>{pct * 100:.0f}%</b>"
+            else:
+                rcls, fd, fr = "", date, f"{res} <b>{pct * 100:.0f}%</b>"
             if k % 2 == 0:
                 fx_rows += f"<div class='jor'>Jornada {k // 2 + 1}</div>"
-            fx_rows += (f"<div class='fx' title='{tip}'>"
-                        f"<span class='fd'>{date}{hoy}</span>"
+            fx_rows += (f"<div class='fx {rcls}' title='{tip}'>"
+                        f"<span class='fd'>{fd}</span>"
                         f"<span class='fa'>{FLAGS[a]} {NAMES_ES[a]}</span>"
                         f"<span class='fs'>{sa}–{sb}</span>"
                         f"<span class='fb'>{NAMES_ES[b]} {FLAGS[b]}</span>"
-                        f"<span class='fr'>{res} <b>{pct * 100:.0f}%</b></span></div>")
+                        f"<span class='fr'>{fr}</span></div>")
         trs = ""
         for pos, (t, ep, gd) in enumerate(rows, 1):
             cls = "q1" if pos <= 2 else ("q3" if t in qualified_thirds else "q0")
@@ -388,6 +419,20 @@ def main():
             border-radius:9px; padding:7px 4px; font-size:17px; font-weight:800; color:var(--gold); }}
   .champlbl {{ font-size:8.5px; letter-spacing:2px; color:#b8860b; font-weight:600; }}
 
+  /* ---------- aciertos del modelo vs resultado real ---------- */
+  .m.hit, .mg.hit, .fx.hit {{ box-shadow:inset 3px 0 0 var(--green); background:rgba(23,201,100,.09); }}
+  .m.exact, .mg.exact, .fx.exact {{ box-shadow:inset 3px 0 0 var(--gold); background:rgba(245,165,36,.11); }}
+  .m.miss, .mg.miss, .fx.miss {{ opacity:.5; }}
+  .m.today, .mg.today, .fx.today {{ box-shadow:inset 3px 0 0 var(--blue); background:rgba(61,155,255,.10); }}
+  .fx.exact .fr {{ color:var(--gold); }}
+  .fx.miss .fr {{ color:var(--red); }}
+  .fx.today .fd {{ color:var(--blue); font-weight:700; }}
+  .rreal {{ display:flex; align-items:center; justify-content:center; gap:6px; margin:3px 0 1px; font-size:9.5px; }}
+  .rrs {{ font-weight:800; background:#06270f; color:#3fe07f; border-radius:5px; padding:0 7px; }}
+  .m.miss .rrs {{ background:#2b0a12; color:#ff7b8e; }}
+  .m.exact .rrs {{ background:#2b2206; color:#ffce6e; }}
+  .rrt {{ color:var(--dim); }}
+
   /* ---------- mini-grupos en el bracket (mismas tarjetas) ---------- */
   .gcol {{ min-width:170px; flex:1; }}
   .gcol .body {{ gap:10px; }}
@@ -450,7 +495,10 @@ def main():
 {bracket_html}
 <h2 class="sec" style="margin-top:28px">Fase de grupos · 11–27 jun (proyección)</h2>
 <div class="groups">{groups_html}</div>
-<p class="note"><b>Cómo leer:</b> en la eliminatoria, cada llave muestra el partido oficial (número, fecha y sede),
+<p class="note"><b>Colores (resultados reales):</b> <span style="color:#17c964">■ verde = acertó el resultado</span> ·
+<span style="color:#f5a524">■ dorado = 🎯 marcador exacto</span> · <span style="color:#3d9bff">■ azul = 🔴 se juega hoy</span> ·
+atenuado = falló. Se actualizan solos desde TheSportsDB.<br>
+<b>Cómo leer:</b> en la eliminatoria, cada llave muestra el partido oficial (número, fecha y sede),
 qué clasificado llega (ej. "1°A vs 3°(CEFHI)" = ganador del grupo A contra un tercero de C/E/F/H/I) y el pronóstico en
 verde: <b>quién gana, marcador y probabilidad con su cuota</b>. Haz clic en la llave para ver la explicación.
 Los equipos mostrados son los que el modelo proyecta que llegan a cada llave — lo único fijo hoy son las llaves.

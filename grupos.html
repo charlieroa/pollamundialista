@@ -19,6 +19,8 @@
   .match.hit { background:rgba(46,160,67,.10); border-left:3px solid #2ea043; padding-left:8px; border-radius:4px; }
   .match.exact { background:rgba(210,153,34,.14); border-left:3px solid #d29922; padding-left:8px; border-radius:4px; }
   .match.miss { opacity:.6; }
+  .match.today { background:rgba(88,166,255,.10); border-left:3px solid #58a6ff; padding-left:8px; border-radius:4px; }
+  .livetag { color:#58a6ff; font-weight:700; margin-left:6px; }
   .result { display:flex; align-items:center; justify-content:center; gap:8px; margin:4px 0 2px; font-size:11px; }
   .rscore { background:#0d3a1a; color:#7ee787; font-weight:700; border-radius:5px; padding:1px 9px; }
   .match.miss .rscore { background:#3a0d0d; color:#ff7b72; }
@@ -62,8 +64,9 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
   <b>Resultados reales hasta 13 jun:</b>
   <span class="chip"><span class="sw" style="background:#2ea043"></span> acertó resultado</span>
   <span class="chip"><span class="sw" style="background:#d29922"></span> 🎯 marcador exacto</span>
+  <span class="chip"><span class="sw" style="background:#58a6ff"></span> 🔴 se juega hoy</span>
   <span class="chip" style="opacity:.6"><span class="sw" style="background:#6e7681"></span> falló</span>
-  <span style="margin-left:auto; color:#7ee787"><b>3/5</b> resultados · <b>1</b> marcador exacto</span>
+  <span style="margin-left:auto; color:#7ee787"><b>4/6</b> resultados · <b>2</b> marcador exacto</span>
 </div>
 <div class="grid">
     <div class="group">
@@ -296,13 +299,13 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
     </div>
     <div class="group">
       <h2>Grupo C</h2>
-      <div class="match ">
+      <div class="match exact">
         <div class="mdate">J1 · 14 jun</div>
         <div class="teams">
           <span class="team ">🇧🇷 Brasil</span>
           <span class="scorebox"><span class="score">1 – 1</span><span class="exact">prob. marcador 11%</span></span>
           <span class="team away fav">Marruecos 🇲🇦</span>
-        </div>
+        </div><div class="result"><span class="rscore">1 – 1</span><span class="rtag">🎯 marcador exacto</span></div>
         <div class="bar">
           <div class="b1" style="width:36.7%"></div>
           <div class="bx" style="width:23.6%"></div>

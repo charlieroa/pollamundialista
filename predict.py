@@ -5,6 +5,7 @@ Calibra ataque/defensa de cada seleccion con sus partidos de 2024
 (ultima temporada accesible en el plan Free de API-Football) y genera
 grupos.html con la cuadricula de los 72 partidos de fase de grupos.
 """
+import datetime
 import json
 import math
 import sys
@@ -14,6 +15,7 @@ from fetch_data import GROUPS
 
 DATA = Path(__file__).parent / "data"
 OUT = Path(__file__).parent / "grupos.html"
+RESULTS_JSON = Path(__file__).parent / "results.json"
 
 MAX_GOALS = 6          # matriz de marcadores 0..6
 SHRINK_K = 6           # suavizado: peso n/(n+K) hacia la media global
@@ -116,15 +118,58 @@ SCHEDULE = {
           ("Croatia", "Ghana", "27 jun"), ("Panama", "England", "27 jun")],
 }
 
-# Resultados REALES jugados (clave = (local, visitante) tal cual en SCHEDULE).
-# Actualizado al 13 jun 2026. Marca: 🎯 marcador exacto / ✔ resultado / atenuado = falló.
-RESULTS = {
-    ("Mexico", "South Africa"): (2, 0),          # 11 jun
-    ("South Korea", "Czech Republic"): (2, 1),   # 11 jun (jugado un día antes de lo programado)
-    ("Canada", "Bosnia and Herzegovina"): (1, 1),# 12 jun
-    ("USA", "Paraguay"): (4, 1),                 # 12 jun (jugado un día antes de lo programado)
-    ("Qatar", "Switzerland"): (1, 1),            # 13 jun
-}
+# --- Resultados REALES (se actualizan solos desde results.json vía fetch_results.py) ---
+MONTHS_ES = {"ene": 1, "feb": 2, "mar": 3, "abr": 4, "may": 5, "jun": 6,
+             "jul": 7, "ago": 8, "sep": 9, "oct": 10, "nov": 11, "dic": 12}
+
+
+def parse_fecha(date_str, year=2026):
+    """'11 jun' -> datetime.date(2026, 6, 11). None si no parsea."""
+    try:
+        d, m = date_str.split()
+        return datetime.date(year, MONTHS_ES[m.lower()[:3]], int(d))
+    except Exception:
+        return None
+
+
+def _pair_key(a, b):
+    return "||".join(sorted([a, b]))
+
+
+def load_results():
+    """Lee results.json -> dict pair_key -> {home, away, gh, ga, status, date}."""
+    if not RESULTS_JSON.exists():
+        return {}
+    try:
+        return json.loads(RESULTS_JSON.read_text(encoding="utf-8")).get("matches", {})
+    except Exception:
+        return {}
+
+
+def real_result(a, b, results):
+    """Marcador real orientado a (local=a, visitante=b): (ga, gb) o None si no jugado."""
+    e = results.get(_pair_key(a, b))
+    if not e or e.get("status") != "FT" or e.get("gh") is None:
+        return None
+    if e["home"] == a:
+        return e["gh"], e["ga"]
+    return e["ga"], e["gh"]  # venían invertidos respecto a nuestro local/visitante
+
+
+def grade(pred, real):
+    """Clasifica el acierto: 'exact' / 'hit' / 'miss' + etiqueta."""
+    sa, sb = pred
+    ra, rb = real
+    if (sa, sb) == (ra, rb):
+        return "exact", "🎯 marcador exacto"
+    if ((sa > sb) - (sa < sb)) == ((ra > rb) - (ra < rb)):
+        return "hit", "✔ acertó resultado"
+    return "miss", "✗ falló"
+
+
+def is_today(date_str):
+    d = parse_fecha(date_str)
+    return d is not None and d == datetime.date.today()
 
 
 def expected_standings(st, mu):
@@ -229,20 +274,19 @@ def predict(a, b, st, mu):
     }
 
 
-def score_summary(st, mu):
+def score_summary(st, mu, results):
     """Cuenta aciertos de resultado y de marcador exacto sobre lo ya jugado."""
     played = hits = exacts = 0
     for fixtures in SCHEDULE.values():
         for a, b, _ in fixtures:
-            res = RESULTS.get((a, b))
-            if not res:
+            real = real_result(a, b, results)
+            if real is None:
                 continue
             played += 1
-            sa, sb = predict(a, b, st, mu)["score"]
-            ra, rb = res
-            if (sa, sb) == (ra, rb):
+            cls, _ = grade(predict(a, b, st, mu)["score"], real)
+            if cls == "exact":
                 exacts += 1; hits += 1
-            elif ((sa > sb) - (sa < sb)) == ((ra > rb) - (ra < rb)):
+            elif cls == "hit":
                 hits += 1
     return played, hits, exacts
 
@@ -250,7 +294,8 @@ def score_summary(st, mu):
 def render(st, mu):
     standings = expected_standings(st, mu)
     qualified_thirds = {team for _, team in best_thirds(standings)}
-    played, hits, exacts = score_summary(st, mu)
+    results = load_results()
+    played, hits, exacts = score_summary(st, mu, results)
     rows = []
     for g, fixtures in SCHEDULE.items():
         cards = []
@@ -259,23 +304,18 @@ def render(st, mu):
             sa, sb = p["score"]
             fav = "home" if p["p1"] >= max(p["px"], p["p2"]) else ("draw" if p["px"] >= p["p2"] else "away")
             # Resultado real (si ya se jugó): clasifica el acierto y colorea
-            res = RESULTS.get((a, b))
+            real = real_result(a, b, results)
             mcls, badge = "", ""
-            if res:
-                ra, rb = res
-                pred_sign = (sa > sb) - (sa < sb)
-                real_sign = (ra > rb) - (ra < rb)
-                if (sa, sb) == (ra, rb):
-                    mcls, tag = "exact", "🎯 marcador exacto"
-                elif pred_sign == real_sign:
-                    mcls, tag = "hit", "✔ acertó resultado"
-                else:
-                    mcls, tag = "miss", "✗ falló"
+            if real is not None:
+                ra, rb = real
+                mcls, tag = grade((sa, sb), real)
                 badge = (f'<div class="result"><span class="rscore">{ra} – {rb}</span>'
                          f'<span class="rtag">{tag}</span></div>')
+            hoy = " today" if (real is None and is_today(date)) else ""
+            day_tag = '<span class="livetag">🔴 HOY</span>' if hoy else ""
             cards.append(f"""
-      <div class="match {mcls}">
-        <div class="mdate">J{k // 2 + 1} · {date}</div>
+      <div class="match {mcls}{hoy}">
+        <div class="mdate">J{k // 2 + 1} · {date}{day_tag}</div>
         <div class="teams">
           <span class="team {'fav' if fav == 'home' else ''}">{FLAGS[a]} {NAMES_ES[a]}</span>
           <span class="scorebox"><span class="score">{sa} – {sb}</span><span class="exact">prob. marcador {p['p_score'] * 100:.0f}%</span></span>
@@ -332,6 +372,8 @@ def render(st, mu):
   .match.hit {{ background:rgba(46,160,67,.10); border-left:3px solid #2ea043; padding-left:8px; border-radius:4px; }}
   .match.exact {{ background:rgba(210,153,34,.14); border-left:3px solid #d29922; padding-left:8px; border-radius:4px; }}
   .match.miss {{ opacity:.6; }}
+  .match.today {{ background:rgba(88,166,255,.10); border-left:3px solid #58a6ff; padding-left:8px; border-radius:4px; }}
+  .livetag {{ color:#58a6ff; font-weight:700; margin-left:6px; }}
   .result {{ display:flex; align-items:center; justify-content:center; gap:8px; margin:4px 0 2px; font-size:11px; }}
   .rscore {{ background:#0d3a1a; color:#7ee787; font-weight:700; border-radius:5px; padding:1px 9px; }}
   .match.miss .rscore {{ background:#3a0d0d; color:#ff7b72; }}
@@ -375,6 +417,7 @@ calibrado con partidos internacionales de 2023–2024 (API-Football) · μ globa
   <b>Resultados reales hasta 13 jun:</b>
   <span class="chip"><span class="sw" style="background:#2ea043"></span> acertó resultado</span>
   <span class="chip"><span class="sw" style="background:#d29922"></span> 🎯 marcador exacto</span>
+  <span class="chip"><span class="sw" style="background:#58a6ff"></span> 🔴 se juega hoy</span>
   <span class="chip" style="opacity:.6"><span class="sw" style="background:#6e7681"></span> falló</span>
   <span style="margin-left:auto; color:#7ee787"><b>{hits}/{played}</b> resultados · <b>{exacts}</b> marcador exacto</span>
 </div>

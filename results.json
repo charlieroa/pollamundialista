@@ -1,0 +1,129 @@
+{
+  "source": "thesportsdb",
+  "league": 4429,
+  "season": 2026,
+  "count": 15,
+  "played": 6,
+  "matches": {
+    "Mexico||South Africa": {
+      "home": "Mexico",
+      "away": "South Africa",
+      "gh": 2,
+      "ga": 0,
+      "status": "FT",
+      "date": "2026-06-11"
+    },
+    "Czech Republic||South Korea": {
+      "home": "South Korea",
+      "away": "Czech Republic",
+      "gh": 2,
+      "ga": 1,
+      "status": "FT",
+      "date": "2026-06-12"
+    },
+    "Bosnia and Herzegovina||Canada": {
+      "home": "Canada",
+      "away": "Bosnia and Herzegovina",
+      "gh": 1,
+      "ga": 1,
+      "status": "FT",
+      "date": "2026-06-12"
+    },
+    "Paraguay||USA": {
+      "home": "USA",
+      "away": "Paraguay",
+      "gh": 4,
+      "ga": 1,
+      "status": "FT",
+      "date": "2026-06-13"
+    },
+    "Brazil||Morocco": {
+      "home": "Brazil",
+      "away": "Morocco",
+      "gh": 1,
+      "ga": 1,
+      "status": "FT",
+      "date": "2026-06-13"
+    },
+    "Qatar||Switzerland": {
+      "home": "Qatar",
+      "away": "Switzerland",
+      "gh": 1,
+      "ga": 1,
+      "status": "FT",
+      "date": "2026-06-13"
+    },
+    "Haiti||Scotland": {
+      "home": "Haiti",
+      "away": "Scotland",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-14"
+    },
+    "Curacao||Germany": {
+      "home": "Germany",
+      "away": "Curacao",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-14"
+    },
+    "Ecuador||Ivory Coast": {
+      "home": "Ivory Coast",
+      "away": "Ecuador",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-14"
+    },
+    "Japan||Netherlands": {
+      "home": "Netherlands",
+      "away": "Japan",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-14"
+    },
+    "Australia||Turkey": {
+      "home": "Australia",
+      "away": "Turkey",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-14"
+    },
+    "Belgium||Egypt": {
+      "home": "Belgium",
+      "away": "Egypt",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-15"
+    },
+    "Saudi Arabia||Uruguay": {
+      "home": "Saudi Arabia",
+      "away": "Uruguay",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-15"
+    },
+    "Cape Verde||Spain": {
+      "home": "Spain",
+      "away": "Cape Verde",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-15"
+    },
+    "Sweden||Tunisia": {
+      "home": "Sweden",
+      "away": "Tunisia",
+      "gh": null,
+      "ga": null,
+      "status": "NS",
+      "date": "2026-06-15"
+    }
+  }
+}
